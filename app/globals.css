@@ -134,6 +134,34 @@ body {
   transform: translateX(2px);
 }
 
+/* Primary button on the ink footer: light fill, dark label */
+.au-btn-on-ink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 50px;
+  padding: 14px 24px;
+  border-radius: 6px;
+  background: var(--au-ground);
+  color: var(--au-ink);
+  font-size: 15px;
+  letter-spacing: -0.018em;
+  transition: background-color 120ms ease-out;
+}
+.au-btn-on-ink:hover {
+  background: var(--au-ground-warm);
+}
+.au-btn-on-ink:active {
+  transition-duration: 80ms;
+}
+.au-btn-on-ink .au-arrow {
+  transition: transform 120ms ease-out;
+}
+.au-btn-on-ink:hover .au-arrow {
+  transform: translateX(2px);
+}
+
 .au-btn-secondary {
   display: inline-flex;
   align-items: center;

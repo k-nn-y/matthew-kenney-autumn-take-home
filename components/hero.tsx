@@ -64,7 +64,7 @@ export function Hero() {
       {/* Hero copy */}
       <div className="absolute inset-x-0 bottom-0">
         <div className="mx-auto max-w-[1312px] px-6 pb-14 md:px-16 md:pb-20">
-          <div className="flex max-w-2xl flex-col items-start gap-6" data-hero-ctas>
+          <div className="flex max-w-2xl flex-col items-start gap-6">
             <p className="au-label hidden text-on-ink-quiet md:block">{hero.eyebrow}</p>
             <p className="au-label text-on-ink-quiet md:hidden">{hero.eyebrowMobile}</p>
             <h1 className="au-track-36 md:au-track-display text-[40px] leading-[0.96] text-on-ink md:text-[56px]">
@@ -75,7 +75,7 @@ export function Hero() {
             <p className="au-track-body max-w-xl text-[19px] leading-relaxed text-on-ink">
               {hero.lead}
             </p>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div id="hero-ctas" className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <a href={MAILTO} className="au-btn-primary">
                 {hero.primary}
                 <ArrowIcon className="au-arrow" />
