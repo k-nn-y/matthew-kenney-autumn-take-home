@@ -1,0 +1,337 @@
+@import "tailwindcss";
+
+:root {
+  /* Grounds */
+  --au-ground: #ffffff;
+  --au-ground-alt: #f5f5f5;
+  --au-ground-warm: #f2f2f0;
+  /* Ink */
+  --au-ink: #111112;
+  --au-sash-black: #1c1b19;
+  --au-body: #4a4945;
+  --au-quiet: #6e6c66;
+  /* Inverted band */
+  --au-on-ink: #fbfbfa;
+  --au-on-ink-quiet: #a8a69e;
+  /* Slate (non-text marks + focus ring only; slate-deep on slate-tint for text-slate) */
+  --au-wet-slate: #6f7e92;
+  --au-slate-deep: #4d5b6e;
+  --au-slate-tint: #eceff3;
+  --au-slate-line: #d6dce4;
+  /* Rules */
+  --au-rule: rgba(28, 27, 25, 0.1);
+  --au-rule-strong: rgba(28, 27, 25, 0.16);
+  --au-rule-on-ink: rgba(251, 251, 250, 0.16);
+  /* Button hover */
+  --au-btn-hover: #33322e;
+  --au-secondary-hover-bg: #e1e6ed;
+  --au-secondary-hover-text: #3e4a5b;
+}
+
+@theme inline {
+  --color-background: var(--au-ground);
+  --color-foreground: var(--au-ink);
+  --color-ground: var(--au-ground);
+  --color-ground-alt: var(--au-ground-alt);
+  --color-ground-warm: var(--au-ground-warm);
+  --color-ink: var(--au-ink);
+  --color-sash: var(--au-sash-black);
+  --color-body: var(--au-body);
+  --color-quiet: var(--au-quiet);
+  --color-on-ink: var(--au-on-ink);
+  --color-on-ink-quiet: var(--au-on-ink-quiet);
+  --color-wet-slate: var(--au-wet-slate);
+  --color-slate-deep: var(--au-slate-deep);
+  --color-slate-tint: var(--au-slate-tint);
+  --color-slate-line: var(--au-slate-line);
+  --color-rule: var(--au-rule);
+  --color-rule-strong: var(--au-rule-strong);
+  --color-rule-on-ink: var(--au-rule-on-ink);
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-geist), system-ui, sans-serif;
+}
+
+html {
+  background: var(--au-ground);
+}
+
+body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 500;
+  font-variation-settings: "opsz" 32;
+  font-feature-settings: "cv11", "ss01";
+  color: var(--au-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Label tier: Geist 400, 12px, +0.18em, uppercase */
+.au-label {
+  font-family: var(--font-geist), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-variation-settings: normal;
+  font-feature-settings: normal;
+}
+
+/* Tracking ramp */
+.au-track-display {
+  letter-spacing: -0.03em;
+} /* 56–64 */
+.au-track-44 {
+  letter-spacing: -0.028em;
+} /* 44–52 */
+.au-track-36 {
+  letter-spacing: -0.026em;
+} /* 36–40 */
+.au-track-32 {
+  letter-spacing: -0.024em;
+} /* 32 */
+.au-track-22 {
+  letter-spacing: -0.019em;
+} /* 22 */
+.au-track-body {
+  letter-spacing: -0.018em;
+} /* 19–20 and below */
+
+.au-tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Focus ring: 2px wet-slate, 2px ground offset, 0ms */
+:focus-visible {
+  outline: 2px solid var(--au-wet-slate);
+  outline-offset: 2px;
+  transition: none;
+}
+
+/* Buttons */
+.au-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 50px;
+  padding: 14px 24px;
+  border-radius: 6px;
+  background: var(--au-sash-black);
+  color: var(--au-on-ink);
+  font-size: 15px;
+  letter-spacing: -0.018em;
+  transition: background-color 120ms ease-out;
+}
+.au-btn-primary:hover {
+  background: var(--au-btn-hover);
+}
+.au-btn-primary:active {
+  transition-duration: 80ms;
+}
+.au-btn-primary .au-arrow {
+  transition: transform 120ms ease-out;
+}
+.au-btn-primary:hover .au-arrow {
+  transform: translateX(2px);
+}
+
+.au-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  padding: 14px 22px;
+  border-radius: 6px;
+  background: var(--au-slate-tint);
+  color: var(--au-slate-deep);
+  border: 1px solid var(--au-wet-slate);
+  font-size: 15px;
+  letter-spacing: -0.018em;
+  transition:
+    background-color 120ms ease-out,
+    color 120ms ease-out;
+}
+.au-btn-secondary:hover {
+  background: var(--au-secondary-hover-bg);
+  color: var(--au-secondary-hover-text);
+}
+.au-btn-secondary:active {
+  transition-duration: 80ms;
+}
+
+/* Inverted secondary (on hero photo): opaque dark fill, 60%-white border, white label */
+.au-btn-secondary-inverted {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  padding: 14px 22px;
+  border-radius: 6px;
+  background: var(--au-sash-black);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  font-size: 15px;
+  letter-spacing: -0.018em;
+  transition: background-color 120ms ease-out;
+}
+.au-btn-secondary-inverted:hover {
+  background: var(--au-btn-hover);
+}
+.au-btn-secondary-inverted:active {
+  transition-duration: 80ms;
+}
+
+@media (max-width: 767px) {
+  .au-btn-primary,
+  .au-btn-secondary,
+  .au-btn-secondary-inverted {
+    font-size: 16px;
+  }
+}
+
+/* Nav links */
+.au-nav-link {
+  color: var(--au-on-ink);
+  font-size: 16px;
+  letter-spacing: -0.018em;
+  transition: color 100ms ease-out;
+}
+.au-nav-link:hover {
+  color: #ffffff;
+}
+
+/* Image plate: reserve aspect, fade on decode */
+.au-plate {
+  background: var(--au-ground-warm);
+  overflow: hidden;
+}
+.au-img {
+  transition: opacity 300ms ease-out;
+}
+/* Only hide pre-decode when scripting is available (no-JS stays visible) */
+@media (scripting: enabled) {
+  .au-img {
+    opacity: 0;
+  }
+  .au-img.au-img-loaded {
+    opacity: 1;
+  }
+}
+
+/* Journey rail animation: 520ms total, four 220ms steps, 100ms stagger.
+   Steps are visible by default (no-JS safe); JS adds au-journey-pending
+   before observing, then au-journey-run to play once. */
+.au-journey.au-journey-pending .au-journey-step {
+  opacity: 0;
+}
+.au-journey.au-journey-run .au-journey-step {
+  animation: au-step-in 220ms cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+.au-journey.au-journey-run .au-journey-step:nth-child(1) {
+  animation-delay: 0ms;
+}
+.au-journey.au-journey-run .au-journey-step:nth-child(2) {
+  animation-delay: 100ms;
+}
+.au-journey.au-journey-run .au-journey-step:nth-child(3) {
+  animation-delay: 200ms;
+}
+.au-journey.au-journey-run .au-journey-step:nth-child(4) {
+  animation-delay: 300ms;
+}
+.au-journey.au-journey-done .au-journey-step {
+  opacity: 1;
+  animation: none;
+}
+@keyframes au-step-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .au-journey-step {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+  .au-img {
+    opacity: 1;
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}
+
+/* FAQ disclosure */
+.au-faq-row {
+  transition:
+    background-color 120ms ease-out,
+    padding 120ms ease-out;
+}
+.au-faq-row:hover {
+  background: var(--au-ground-warm);
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.au-chevron {
+  transition: transform 200ms ease-out;
+}
+.au-chevron-open {
+  transform: rotate(180deg);
+}
+.au-faq-panel {
+  display: grid;
+  grid-template-rows: 1fr; /* no-JS: answers stay readable */
+  transition: grid-template-rows 200ms ease-in;
+}
+.au-faq-panel > div {
+  overflow: hidden;
+  transition: opacity 160ms ease-in;
+}
+@media (scripting: enabled) {
+  .au-faq-panel {
+    grid-template-rows: 0fr;
+  }
+  .au-faq-panel > div {
+    opacity: 0;
+  }
+  .au-faq-panel-open {
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 200ms ease-out;
+  }
+  .au-faq-panel-open > div {
+    opacity: 1;
+    transition: opacity 160ms ease-out;
+  }
+}
+
+/* Mobile reply bar */
+.au-reply-bar {
+  transform: translateY(100%);
+  opacity: 0;
+  transition:
+    transform 240ms ease-out,
+    opacity 240ms ease-out;
+  pointer-events: none;
+}
+.au-reply-bar-visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .au-reply-bar {
+    transition: none;
+    transform: none;
+    display: none;
+  }
+  .au-reply-bar-visible {
+    display: block;
+  }
+}
