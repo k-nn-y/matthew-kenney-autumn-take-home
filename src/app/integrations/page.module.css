@@ -1,0 +1,189 @@
+/* /integrations — measured off the Paper boards "Integrations · Desktop 1440"
+   and "Integrations · Mobile 390". Mobile 390 is the base; the one breakpoint
+   at 900px is the desktop board. No motion on this page: the only transition
+   anywhere is the one the shared button already owns. */
+
+/* --- the systems list ---------------------------------------------------
+   The board gives this frame no top padding at either size — the hero's own
+   bottom padding is the whole gap — and 60px (mobile) / 120px (desktop)
+   beneath. So `au-section` is deliberately not used here. */
+
+.systems {
+  background: var(--au-ground);
+  padding-bottom: 60px;
+}
+
+.rows {
+  width: 100%;
+}
+
+/* Label over list on mobile; a 1px hairline opens every row and closes the
+   stack. Only the first rule is 1.5px sash black — the same section-opening
+   mark §03 uses on the homepage. */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding-block: 22px;
+  border-top: 1px solid var(--au-rule);
+}
+
+.row:first-child {
+  border-top: 1.5px solid var(--au-ink-2);
+}
+
+.row:last-child {
+  border-bottom: 1px solid var(--au-rule);
+}
+
+.rowLabel {
+  color: var(--au-muted);
+}
+
+/* Lead-tier size on mobile, sub-tier leading on desktop. The board sets this
+   run-on list larger than body: it is the content of the page, not a caption. */
+.rowText {
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: -0.018em;
+  color: var(--au-ink);
+  /* One long unbroken run of vendor names must never widen the page. */
+  overflow-wrap: break-word;
+}
+
+/* The closing row states what Autumn leaves alone, so the board drops it from
+   ink to body — the quieter voice, not a second colour. */
+.rowText.rowQuiet {
+  color: var(--au-body);
+}
+
+/* --- "Not on the list?" -------------------------------------------------
+   Gray band, no hairlines: the board draws none, and the shared footer opens
+   with its own 1px rule directly beneath this one, so `au-ground-alt` here
+   would print two lines where the design has one. */
+
+.notListed {
+  background: var(--au-ground-alt);
+  padding-top: 56px;
+  padding-bottom: 60px;
+}
+
+.notListedShell {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.notListedText {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* au-sub, but the board sets 28/34 on mobile and 32/38 on desktop. */
+h2.notListedTitle {
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.022em;
+}
+
+/* 17px is a declared working size (docs/DESIGN.md), used here exactly as the
+   mobile board sets it; desktop returns to the lead tier. The 12px below the
+   paragraph is the board's extra air above the button. */
+.notListedBody {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 27px;
+  letter-spacing: -0.018em;
+  color: var(--au-body);
+  padding-bottom: 12px;
+}
+
+.cta {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* The board's mobile CTA is a full-width 52px bar; desktop is intrinsic. */
+.cta :global(.au-btn) {
+  width: 100%;
+  min-height: 52px;
+}
+
+/* --- desktop 1440 ------------------------------------------------------- */
+
+@media (min-width: 900px) {
+  .systems {
+    padding-bottom: 120px;
+  }
+
+  /* 280 label column beside a list column that takes the rest. Both tracks
+     shrink — a fixed 280px would overflow between 900 and 1440. */
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+    column-gap: 80px;
+    align-items: start;
+    padding-block: 34px;
+  }
+
+  /* 6px drops the label's cap-height onto the first line of the list. */
+  .rowLabel {
+    padding-top: 6px;
+  }
+
+  .rowText {
+    font-size: 22px;
+    line-height: 34px;
+    letter-spacing: -0.019em;
+  }
+
+  .notListed {
+    padding-top: 80px;
+    padding-bottom: 88px;
+  }
+
+  /* Text block up to 760, button intrinsic, the slack between them. */
+  .notListedShell {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 64px;
+  }
+
+  .notListedText {
+    flex: 0 1 760px;
+    gap: 12px;
+  }
+
+  h2.notListedTitle {
+    font-size: var(--au-t-sub);
+    line-height: 38px;
+    letter-spacing: -0.024em;
+  }
+
+  .notListedBody {
+    font-size: var(--au-t-lead);
+    line-height: 28px;
+    padding-bottom: 0;
+  }
+
+  /* The board fixes the button at its intrinsic width (flexShrink: 0) and lets
+     the 760px text block absorb every pixel the row is short of 1440. The
+     shrink has to be refused on the flex item itself — the wrapper — because
+     the button inside it is stretched by a column container, not sized by its
+     own flex-shrink. Without this the label wrapped to two lines and the bar
+     grew to 74px anywhere under about 1180. */
+  .cta {
+    flex-shrink: 0;
+  }
+
+  .cta :global(.au-btn) {
+    width: auto;
+    min-height: 50px;
+  }
+}

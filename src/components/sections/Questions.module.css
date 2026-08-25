@@ -1,0 +1,232 @@
+/* §07 Questions — every value measured off the board frames "§07 Questions"
+   (desktop 1440) and its mobile 390 twin. Mobile is the base; the single
+   900px breakpoint carries the desktop board.
+
+   Motion budget for this section (docs/ANIMATION_SPEC.md): the disclosure
+   height at 200ms, the answer opacity at 160ms, the chevron at 200ms, and the
+   row tint at 120ms. Nothing else moves, and every duration is driven by a
+   custom property so `prefers-reduced-motion` can zero all four in one place
+   without turning any state change off. */
+
+/* Board: 64 / 68 mobile, 120 / 128 desktop. The top matches --au-section-pad
+   exactly; the board runs the bottom 4px (8px on desktop) longer, so the
+   footer band below does not crowd the last hairline. The element+class
+   selector wins that extra deterministically over `.au-section`, whatever
+   order the stylesheets land in — the same guard §05 uses. */
+section.section {
+  background: var(--au-ground);
+  padding-block: 64px 68px;
+}
+
+.left {
+  padding-bottom: 30px;
+}
+
+/* The mobile board puts 22px under the label; the shared SectionHeader ships
+   18px. Scoped here, as §05 does, so this section matches its own board
+   without moving the shared component. This selector outranks SectionHeader's
+   own, so the board's desktop 28px is restated in the breakpoint below. */
+.left > div:first-child > p:first-child {
+  padding-bottom: 22px;
+}
+
+/* --------------------------------------------------------------------------
+   Rows
+   -------------------------------------------------------------------------- */
+
+.list {
+  --q-open: 0ms;
+  --q-fade: 0ms;
+  --q-tint: 120ms;
+}
+
+/* Switched on one frame after mount, so the takeover collapse is instant. */
+.list[data-animated="true"] {
+  --q-open: 200ms;
+  --q-fade: 160ms;
+}
+
+.row {
+  border-top: 1px solid var(--au-rule-strong);
+}
+
+.row[data-open="false"] {
+  border-top-color: var(--au-rule);
+}
+
+.row:last-child {
+  border-bottom: 1px solid var(--au-rule);
+}
+
+.heading {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* The hover fill is 16px wider than the column on each side and the padding
+   cancels the margin, so the question and the chevron sit on the same edges
+   open, closed or hovered. Nothing moves; only the fill appears. */
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 44px;
+  /* A button's `width: auto` shrink-to-fits even as a flex container, so the
+     width is explicit: the row, plus the 16px it borrows on each side. */
+  width: calc(100% + 32px);
+  padding-block: 20px;
+  padding-inline: 16px;
+  margin-inline: -16px;
+  text-align: left;
+  background-color: transparent;
+  transition: background-color var(--q-tint) ease-out;
+}
+
+@media (hover: hover) {
+  .trigger:hover {
+    background-color: var(--au-ground-warm);
+  }
+}
+
+/* The board's open row is 182px, and it is built as 20px above a 44px title
+   box, a 12px gap, the answer, then 24px. That 44px box is the only
+   min-height on the board and it is deliberate: it drops the title and the
+   chevron 8px below where a closed row draws them. 76px = 20 + 44 + 12, and
+   the 44px content box centres the 28px title to give the same 8px. */
+.row[data-open="true"] .trigger {
+  min-height: 76px;
+  padding-bottom: 12px;
+}
+
+/* min-width: 0 keeps a long question from shoving the chevron past the column
+   edge on a narrow phone; the wrap rule catches the word that caused it. */
+.question {
+  min-width: 0;
+  overflow-wrap: break-word;
+  color: var(--au-ink);
+}
+
+.chevron {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--au-ink-2);
+  transform: rotate(180deg);
+  transition: transform var(--q-open) ease-out, color var(--q-open) ease-out;
+}
+
+.row[data-open="false"] .chevron {
+  color: var(--au-muted);
+  transform: none;
+  transition: transform var(--q-open) ease-in, color var(--q-open) ease-in;
+}
+
+/* --------------------------------------------------------------------------
+   Answers
+
+   The resting state is OPEN: with no JavaScript every answer is readable and
+   the server-rendered aria-expanded agrees with it. `visibility` is what takes
+   a collapsed answer out of the accessibility tree, and it is delayed by the
+   height duration so the text does not vanish mid-collapse.
+   Height is the one sanctioned exception to transform/opacity-only motion.
+   -------------------------------------------------------------------------- */
+
+.panel {
+  display: grid;
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition: grid-template-rows var(--q-open) ease-out, visibility 0s;
+}
+
+.row[data-open="false"] .panel {
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows var(--q-open) ease-in,
+    visibility 0s linear var(--q-open);
+}
+
+/* No padding on this box: padding survives a 0fr track and would leave every
+   closed row 24px taller than the board draws it. The answer carries it. */
+.panelInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.answer {
+  max-width: 600px;
+  padding-bottom: 24px;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 27px;
+  letter-spacing: -0.3px;
+  color: var(--au-body);
+  opacity: 1;
+  transition: opacity var(--q-fade) ease-out;
+}
+
+.row[data-open="false"] .answer {
+  opacity: 0;
+  transition: opacity var(--q-fade) ease-in;
+}
+
+/* --------------------------------------------------------------------------
+   Desktop 1440
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 900px) {
+  section.section {
+    padding-block: 120px 128px;
+  }
+
+  /* Board columns are 480 and 736 with a 96px gutter. Proportional tracks,
+     never fixed widths, so the pair shrinks cleanly between 900 and 1440. */
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 480fr) minmax(0, 736fr);
+    column-gap: 96px;
+  }
+
+  .left {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0;
+  }
+
+  /* The board bottom-aligns the opener's lead paragraph with the last FAQ
+     hairline. SectionHeader is a flex column whose last child is that lead,
+     so stretching it to the grid row height and pushing the last child down
+     reproduces the board without forking the shared component. */
+  .left > * {
+    flex: 1 1 auto;
+  }
+
+  .left > * > :last-child {
+    margin-top: auto;
+    max-width: 420px;
+  }
+
+  /* Board desktop: 28px under the label. */
+  .left > div:first-child > p:first-child {
+    padding-bottom: 28px;
+  }
+
+  .list {
+    padding-top: 8px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — every state change still happens, instantly. Nothing here
+   becomes unreachable: the rows still open, the chevron still flips, the tint
+   still appears.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .list,
+  .list[data-animated="true"] {
+    --q-open: 0ms;
+    --q-fade: 0ms;
+    --q-tint: 0ms;
+  }
+}

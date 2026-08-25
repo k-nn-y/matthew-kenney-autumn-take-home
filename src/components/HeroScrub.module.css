@@ -1,0 +1,30 @@
+/* Scroll-scrubbed hero. The still is the base layer and is what ships in the
+   HTML; the video is layered over it and only ever fades in once it can play
+   through. Reduced motion, Save-Data and no JavaScript all keep the still,
+   which is why the still is a real <img> and not a poster attribute. */
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--hero-object-position);
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+
+.ready {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video {
+    transition: none;
+  }
+}

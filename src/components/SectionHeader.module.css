@@ -1,0 +1,47 @@
+/* Desktop: label full width, then headline (700) and lead (480) side by side.
+   Both columns shrink — fixed widths would overflow between 900 and 1440.
+   Mobile: one column, because 342 cannot hold two. */
+.row,
+.stacked {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  padding-bottom: 18px;
+}
+
+.headline {
+  padding-bottom: 18px;
+}
+
+@media (min-width: 900px) {
+  .row {
+    display: grid;
+    /* 700 + 480 with the slack between them, exactly as the board draws it —
+       a proportional split put the lead 29px early and 29px wide. Both tracks
+       still shrink below 1240px of content, so 900 -> 1440 reflows. */
+    grid-template-columns: minmax(0, 700px) minmax(0, 480px);
+    justify-content: space-between;
+    column-gap: 60px;
+    align-items: start;
+  }
+
+  .row .label {
+    grid-column: 1 / -1;
+    padding-bottom: 28px;
+  }
+
+  .row .headline {
+    padding-bottom: 0;
+  }
+
+  /* §05 / §07: the header is a left column beside a right-hand row stack. */
+  .stacked .label {
+    padding-bottom: 28px;
+  }
+
+  .stacked .headline {
+    padding-bottom: 32px;
+  }
+}

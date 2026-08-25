@@ -1,0 +1,196 @@
+/* Hero — measured off "Hero" on the v3 desktop (1440x860) and mobile (390x900)
+   boards. The hero and its nav are inset 134px on desktop, wider than the 64px
+   the rest of the page uses; that inset is the board's, not an accident. */
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 900px;
+  background: var(--au-ink-ground);
+  overflow: clip;
+  isolation: isolate;
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Both layers read the same framing, so the video can never sit a few percent
+   off the still it fades in over. The clip is 16:9 against a 0.43:1 phone
+   hero, so mobile holds the village rather than the open water beside it. */
+.hero {
+  --hero-object-position: 72% 50%;
+}
+
+/* Both scrims are legibility devices, not decoration. Changing either one is
+   an accessibility change until the contrast is re-measured (docs/DESIGN.md). */
+.scrimTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 180px;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgb(17 17 18 / 62%) 0%,
+    rgb(17 17 18 / 22%) 52%,
+    rgb(17 17 18 / 0%) 100%
+  );
+}
+
+.scrimBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 740px;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    rgb(17 17 18 / 94%) 0%,
+    rgb(17 17 18 / 90%) 22%,
+    rgb(17 17 18 / 78%) 48%,
+    rgb(17 17 18 / 46%) 78%,
+    rgb(17 17 18 / 0%) 100%
+  );
+}
+
+.inset {
+  padding-inline: 24px;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  /* auto margin rather than justify-content: the content pins to the bottom but
+     still overflows downward gracefully if the type wraps taller than measured. */
+  margin-top: auto;
+  padding-block: 40px 56px;
+}
+
+/* The board's 760px is the measure, not the padded box. */
+.column {
+  max-width: 760px;
+}
+
+.eyebrow {
+  color: var(--au-on-ink);
+  padding-bottom: 18px;
+}
+
+.h1 {
+  padding-bottom: 20px;
+  letter-spacing: -0.027em;
+}
+
+.lead {
+  color: var(--au-on-ink);
+  padding-bottom: 26px;
+  max-width: 600px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 26px;
+}
+
+.hairline {
+  height: 1px;
+  background: var(--au-rule-on-ink);
+  margin-bottom: 18px;
+}
+
+/* Surfaces strip: the three places the ads actually run. */
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Each run is separator + label so the flex gap lands on both sides of the ×,
+   which is what the board's evenly-spaced strip actually shows. */
+.stripRun {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+}
+
+.stripItem {
+  font-size: var(--au-t-caption);
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.01em;
+  color: var(--au-on-ink-muted);
+}
+
+.stripSep {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--au-on-ink-muted);
+}
+
+@media (min-width: 900px) {
+  .hero {
+    min-height: 860px;
+  }
+
+  .hero {
+    --hero-object-position: 50% 50%;
+  }
+
+  .scrimTop {
+    height: 210px;
+  }
+
+  .scrimBottom {
+    height: 700px;
+    background: linear-gradient(
+      to top,
+      rgb(17 17 18 / 94%) 0%,
+      rgb(17 17 18 / 88%) 22%,
+      rgb(17 17 18 / 74%) 48%,
+      rgb(17 17 18 / 44%) 76%,
+      rgb(17 17 18 / 0%) 100%
+    );
+  }
+
+  .inset {
+    /* 134px at 1440, shrinking with the viewport so nothing clips at 900. */
+    padding-inline: max(64px, min(134px, 9.31vw));
+  }
+
+        .content {
+    padding-block: 40px 76px;
+  }
+
+  .eyebrow {
+    padding-bottom: 22px;
+  }
+
+  .h1 {
+    padding-bottom: 26px;
+    letter-spacing: -0.03em;
+  }
+
+  .lead {
+    padding-bottom: 30px;
+  }
+
+  .actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-bottom: 30px;
+  }
+
+  .strip {
+    gap: 14px;
+  }
+}

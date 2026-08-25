@@ -1,0 +1,414 @@
+/* Site chrome. It is fixed to the top on every route and has two states:
+   over the homepage hero it is bare — the wordmark and the controls printed
+   straight onto the photograph — and everywhere else it is a floating bar,
+   inset from the viewport edges and frosted, so the page reads through it.
+   Measured off Autumn's live nav. */
+
+.dock {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 12px;
+  transition: padding 240ms ease-out;
+}
+
+/* Before the first paint has settled the chrome does not animate. Arriving at
+   /#how-it-works lands the reader past the switch line, and the bar stretching
+   open on arrival reads as the page rearranging itself under them — every
+   other route just appears. Crossing the line by scrolling still animates,
+   because there the change is the reader's own doing. */
+.dock:not([data-settled]),
+.dock:not([data-settled]) .bar,
+.dock:not([data-settled]) .bar::before {
+  transition: none;
+}
+
+/* Bare state: no float, so the wordmark keeps the hero's own 24/134px inset. */
+.flush {
+  padding: 0;
+}
+
+.bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 10px 10px 20px;
+  border: 1px solid transparent;
+  /* Concentric with the controls inside it: the buttons keep the brand's 6px
+     and the bar adds its own 10px of padding to reach the outer corner, so the
+     two curves run parallel instead of turning at different rates. */
+  border-radius: calc(var(--au-r-btn) + 10px);
+  color: var(--au-ink);
+  transition: background-color 240ms ease-out, border-color 240ms ease-out,
+    color 240ms ease-out, padding 240ms ease-out;
+}
+
+/* Glass. The bar reads white, but it transmits: the blur is heavily saturated
+   so whatever is behind it bleeds through as colour, and a low-alpha spectral
+   wash over the top gives the edge its shimmer. No hue is invented here — the
+   chroma is the photograph's, which is the same rule the rest of the page
+   follows. Over a white section it stays plain white, because there is nothing
+   behind it to transmit. */
+.stuck {
+  /* 84%, not less. The bar has to cross the ink price band, and glass thin
+     enough to look good over a photograph composites to a mid grey over ink
+     — which drops the nav's body text under 4.5:1. Legibility is the binding
+     constraint on this page, so the glass gives way first. */
+  background: rgb(255 255 255 / 84%);
+  border-color: var(--au-rule);
+  backdrop-filter: blur(20px) saturate(2.4) brightness(1.04);
+  -webkit-backdrop-filter: blur(20px) saturate(2.4) brightness(1.04);
+  isolation: isolate;
+}
+
+.stuck::before {
+  --au-glass-angle: 118deg;
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.75;
+  mix-blend-mode: overlay;
+  /* The wash turns as the bar settles, so the glass reads as catching light
+     rather than as a fixed decal. Registered above, so it interpolates. */
+  transition: --au-glass-angle 600ms ease-out;
+  background: linear-gradient(
+    var(--au-glass-angle),
+    rgb(255 214 170 / 22%) 0%,
+    rgb(255 255 255 / 0%) 26%,
+    rgb(170 214 255 / 20%) 52%,
+    rgb(255 255 255 / 0%) 74%,
+    rgb(255 190 210 / 18%) 100%
+  );
+}
+
+/* Where the backdrop cannot be filtered, the bar goes opaque rather than
+   translucent — a half-transparent bar over a photograph is unreadable. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .stuck {
+    background: rgb(255 255 255 / 96%);
+  }
+
+  .stuck::before {
+    display: none;
+  }
+}
+
+.flush .bar {
+  padding-inline: 24px;
+  color: var(--au-on-ink);
+}
+
+.logoLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.links {
+  display: none;
+}
+
+.link,
+.menuTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: var(--au-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: -0.016em;
+  transition: color 100ms ease-out;
+}
+
+.flush .link,
+.flush .menuTrigger {
+  color: var(--au-on-ink);
+}
+
+.link:hover,
+.menuTrigger:hover,
+.menuOpen .menuTrigger {
+  color: var(--au-ink);
+}
+
+.flush .link:hover,
+.flush .menuTrigger:hover,
+.flush .menuOpen .menuTrigger {
+  color: #ffffff;
+}
+
+/* The current page is ink against body siblings, and nowhere else claims it. */
+.link[aria-current="page"] {
+  color: var(--au-ink);
+}
+
+.flush .link[aria-current="page"] {
+  color: #ffffff;
+}
+
+.chevron {
+  flex-shrink: 0;
+  transition: transform 200ms ease-out;
+}
+
+.menuOpen .chevron {
+  transform: rotate(180deg);
+}
+
+/* --- the More menu ------------------------------------------------------- */
+
+.menu {
+  position: relative;
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  z-index: 30;
+  min-width: 216px;
+  padding: 8px;
+  background: var(--au-ground);
+  border: 1px solid var(--au-rule);
+  border-radius: var(--au-r-btn);
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity 120ms ease-out, transform 120ms ease-out;
+}
+
+.menuOpen .panel {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.panelLink {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 12px;
+  border-radius: var(--au-r-btn);
+  color: var(--au-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: -0.016em;
+  transition: background-color 120ms ease-out, color 120ms ease-out;
+}
+
+.panelLink:hover,
+.panelLink:focus-visible {
+  background: var(--au-ground-warm);
+  color: var(--au-ink);
+}
+
+.panelLink[aria-current="page"] {
+  color: var(--au-ink);
+}
+
+/* --- the two square controls -------------------------------------------- */
+
+/* On a phone the CTA loses its label and keeps its arrow, and the menu is the
+   square beside it. Both are 46px, which is also the tap target. */
+.square {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  border-radius: var(--au-r-btn);
+  transition: background-color 120ms ease-out, border-color 120ms ease-out,
+    color 120ms ease-out;
+}
+
+.squareSolid {
+  background: var(--au-ink-2);
+  border-color: var(--au-ink-2);
+  color: var(--au-on-ink);
+}
+
+.squareSolid:hover {
+  background: var(--au-ink-2-hover);
+  border-color: var(--au-ink-2-hover);
+}
+
+.squareQuiet {
+  background: var(--au-ground);
+  border-color: var(--au-rule-strong);
+  color: var(--au-ink);
+}
+
+.squareQuiet:hover {
+  background: var(--au-ground-warm);
+}
+
+.textCta {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .dock {
+    padding: 12px 24px;
+  }
+
+  .bar {
+    padding: 10px 10px 10px 24px;
+    max-width: calc(var(--au-max) + 32px);
+    margin-inline: auto;
+  }
+
+  .flush .bar {
+    max-width: none;
+    padding-inline: max(64px, min(134px, 9.31vw));
+    padding-block: 26px;
+  }
+
+  .links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .group {
+    gap: 32px;
+  }
+
+  .square {
+    display: none;
+  }
+
+  .textCta {
+    display: inline-flex;
+    min-height: 42px;
+    gap: 8px;
+    padding: 11px 18px 11px 20px;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.01em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock,
+  .bar,
+  .link,
+  .menuTrigger,
+  .chevron,
+  .panel,
+  .panelLink,
+  .square {
+    transition: none;
+  }
+
+  .panel {
+    transform: none;
+  }
+
+  .menuOpen .chevron {
+    transform: rotate(180deg);
+  }
+}
+
+/* --- the phone menu ------------------------------------------------------ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  background: var(--au-ground);
+  color: var(--au-ink);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 240ms ease-out, transform 240ms ease-out;
+}
+
+.overlayOpen {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.overlayBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+  padding: 22px 22px 22px 24px;
+  border-bottom: 1px solid var(--au-rule);
+}
+
+/* The rows scroll and the CTA does not, so the reply is always one press away
+   however long the list gets. */
+.overlayScroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-inline: 24px;
+}
+
+.overlayLink {
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+  padding-block: 20px;
+  border-top: 1px solid var(--au-rule);
+  color: var(--au-ink);
+  font-size: var(--au-t-lead);
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: -0.018em;
+}
+
+.overlayList > li:first-child .overlayLink {
+  border-top: 0;
+}
+
+.overlayLink[aria-current="page"] {
+  color: var(--au-muted);
+}
+
+.overlayGroupLabel {
+  padding-top: 32px;
+  padding-bottom: 4px;
+}
+
+.overlayFoot {
+  flex-shrink: 0;
+  padding: 20px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--au-rule);
+}
+
+@media (min-width: 900px) {
+  .overlay {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    transition: none;
+    transform: none;
+  }
+}

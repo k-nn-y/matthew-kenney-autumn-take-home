@@ -1,0 +1,156 @@
+/* /blog/why-the-hospitality-stack-fragments — one long-form note.
+   Mobile 390 is the base; the 900px breakpoint is the desktop 1440 board.
+   Board padding: head 56/44, body 52/68 on mobile; head 120/64, body 88/120
+   on desktop. Horizontal padding is au-shell's gutter (24 / 64), which is the
+   board's paddingInline at both sizes.
+
+   The measure is the whole layout: the head column is capped at 760 and the
+   prose column at 680, both centred, and neither grows past that however wide
+   the window gets. Every column is a max-width, never a width, so the page
+   reflows to 320 with nothing pushing the viewport wide.
+
+   Element+class selectors (h1/* Display tier, so it scales down on mobile — the section-h2 ramp with the
+   board's own article sizes on top of it. */
+h1p/* --------------------------------------------------------------------------
+   Photograph — the one full-bleed element. The plate reserves the band's
+   height, so nothing below it moves when the image decodes.
+   -------------------------------------------------------------------------- */
+
+.photo {
+  height: 260px;
+}
+
+/* --------------------------------------------------------------------------
+   Body
+   -------------------------------------------------------------------------- */
+
+.body {
+  padding-top: 52px;
+  padding-bottom: 68px;
+}
+
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 680px;
+  min-width: 0;
+  margin-inline: auto;
+}
+
+p.para {
+  font-size: 18px;
+  line-height: 30px;
+  letter-spacing: -0.32px;
+}
+
+/* The prose gap already sits above this; the margin is the board's extra
+   breath before a new section of the argument. */
+h2.heading {
+  margin-top: 12px;
+  font-size: 28px;
+  line-height: 36px;
+  letter-spacing: -0.62px;
+}
+
+/* Pull quote — a 2px sash-black rule on the left and nothing else. Not a card,
+   no tint, no radius, no shadow. */
+.quote {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-block: 8px;
+  padding-block: 4px;
+  padding-left: 22px;
+  border-left: 2px solid var(--au-ink-2);
+}
+
+.quoteText {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 33px;
+  letter-spacing: -0.42px;
+  color: var(--au-ink);
+}
+
+/* Byline, under the closing hairline. */
+.close {
+  margin-top: 12px;
+  padding-top: 22px;
+  border-top: 1px solid var(--au-rule);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin-top: 6px;
+  color: var(--au-body);
+  transition: color 100ms ease-out;
+}
+
+.back:hover {
+  color: var(--au-ink);
+}
+
+.backArrow {
+  flex-shrink: 0;
+}
+
+@media (min-width: 900px) {
+  .head {
+    padding-top: 120px;
+    padding-bottom: 64px;
+  }
+
+  h1  p  .photo {
+    height: 460px;
+  }
+
+  .body {
+    padding-top: 88px;
+    padding-bottom: 120px;
+  }
+
+  .prose {
+    gap: 26px;
+  }
+
+  p.para {
+    font-size: 19px;
+    line-height: 32px;
+    letter-spacing: -0.018em;
+  }
+
+  h2.heading {
+    margin-top: 20px;
+    font-size: var(--au-t-sub);
+    line-height: 40px;
+    letter-spacing: -0.77px;
+  }
+
+  .quote {
+    gap: 14px;
+    margin-block: 14px;
+    padding-block: 6px;
+    padding-left: 30px;
+  }
+
+  .quoteText {
+    font-size: 26px;
+    line-height: 38px;
+    letter-spacing: -0.55px;
+  }
+
+  .close {
+    margin-top: 20px;
+    padding-top: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back {
+    transition: none;
+  }
+}

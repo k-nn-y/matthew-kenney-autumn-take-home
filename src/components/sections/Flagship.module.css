@@ -1,0 +1,209 @@
+/* §06 Flagship. Mobile 390 is the base; the 900px breakpoint is the whole
+   page's only one. Every value measured off the boards EWH-0 / EPX-0.
+   No shadows, no motion — the photograph carries all the chroma. */
+
+.card {
+  display: grid;
+  overflow: hidden;
+  background: var(--au-ground);
+  border: 1px solid var(--au-rule);
+  border-radius: var(--au-r-card);
+}
+
+/* object-position differs per board, and Photo writes it inline on the image,
+   so it is handed down as a custom property rather than fought with. */
+.photo {
+  --flagship-photo-pos: 52% 55%;
+
+  width: 100%;
+  height: 230px;
+}
+
+.copy {
+  min-width: 0;
+  padding: 32px 24px 30px;
+}
+
+.eyebrow {
+  padding-bottom: 20px;
+}
+
+/* A tier of its own: between .au-sub and .au-section-h2, per the board.
+   Tracking stays monotonic against both (-0.024em at 32, -0.028em at 44).
+   Greedy wrapping on purpose: text-wrap: pretty recomposed the mobile board's
+   "If you would rather / we ran the whole / thing." into a short first line. */
+.headline {
+  padding-bottom: 18px;
+  color: var(--au-ink);
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 35px;
+  letter-spacing: -0.024em;
+}
+
+/* Desktop breaks the headline after "rather"; mobile runs it on. */
+.headlineLine {
+  display: inline;
+}
+
+.lead {
+  padding-bottom: 26px;
+}
+
+/* Mobile: three rows, figure left, label right, hairline between. */
+.facts {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--au-rule);
+}
+
+.fact {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+  padding-block: 10px;
+}
+
+.fact + .fact {
+  border-top: 1px solid var(--au-rule);
+}
+
+.figure {
+  color: var(--au-ink);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: -0.019em;
+}
+
+.factLabel {
+  text-align: right;
+  overflow-wrap: break-word;
+}
+
+.cta {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* The board's mobile CTA is a full-width 54px bar; desktop is intrinsic. */
+.cta :global(.au-btn) {
+  width: 100%;
+  min-height: 54px;
+}
+
+.note {
+  padding-top: 14px;
+}
+
+@media (min-width: 900px) {
+  /* 544 : 768 off the 1312 card. fr, not px, so the pair shrinks together. */
+  .card {
+    grid-template-columns: minmax(0, 544fr) minmax(0, 768fr);
+    align-items: stretch;
+  }
+
+  .photo {
+    --flagship-photo-pos: 52% 50%;
+
+    height: auto;
+  }
+
+  /* 60px inline at 1440; fluid below it so the copy column never overruns
+     between the breakpoint and the board width. */
+  .copy {
+    padding: 64px clamp(32px, 4.4vw, 60px) 60px;
+  }
+
+  .eyebrow {
+    padding-bottom: 26px;
+  }
+
+  .headline {
+    padding-bottom: 22px;
+    font-size: 44px;
+    line-height: 46px;
+    letter-spacing: -0.028em;
+  }
+
+  .headlineLine {
+    display: block;
+  }
+
+  .lead {
+    padding-bottom: 34px;
+  }
+
+  /* Three mini-columns, hairline dividers, equal shrinkable widths. */
+  .facts {
+    flex-direction: row;
+    padding-top: 26px;
+    padding-bottom: 0;
+  }
+
+  /* justify-content belongs to the mobile row only. Left standing here it
+     bottom-aligns a label against the tallest column the moment one of them
+     wraps (every width from 900 to about 1300), which the board never shows:
+     the label sits 6px under its figure and nowhere else. */
+  .fact {
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 6px;
+    padding-block: 0;
+    padding-inline: 20px;
+  }
+
+  .fact:first-child {
+    padding-left: 0;
+  }
+
+  .fact:last-child {
+    padding-right: 0;
+  }
+
+  .fact + .fact {
+    border-top: 0;
+    border-left: 1px solid var(--au-rule);
+  }
+
+  .figure {
+    font-size: 26px;
+    line-height: 32px;
+    letter-spacing: -0.021em;
+  }
+
+  .factLabel {
+    text-align: left;
+  }
+
+  /* Note sits beside the button at board width and wraps beneath it when the
+     column gets tight — no second breakpoint, no overflow. */
+  .cta {
+    flex-flow: row wrap;
+    align-items: center;
+    column-gap: 20px;
+    row-gap: 14px;
+    padding-top: 34px;
+  }
+
+  .cta :global(.au-btn) {
+    flex-shrink: 0;
+    width: auto;
+    min-height: 50px;
+  }
+
+  .note {
+    flex: 0 1 220px;
+    min-width: 0;
+    max-width: 220px;
+    padding-top: 0;
+  }
+}

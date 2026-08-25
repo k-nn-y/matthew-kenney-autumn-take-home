@@ -1,0 +1,289 @@
+/* au-section-h2 already carries 36/-0.026em on mobile and 60/58/-0.03em on
+   desktop. Only the mobile leading differs from the tier: the board sets 38. */
+h1/* Mobile: a stacked term/value list under a hairline.
+   Desktop: one row of values, hairline-separated, terms visually dropped. */
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid var(--au-rule);
+  padding-top: 22px;
+  padding-bottom: 28px;
+}
+
+/* The board leaves align-items at its initial value on these rows, so the
+   12px term and the 16px value both hang from the top of the row. */
+.fact {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.factLabel {
+  flex-shrink: 0;
+}
+
+.factValue {
+  color: var(--au-ink);
+  font-size: var(--au-t-body);
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.25px;
+  text-align: right;
+}
+
+/* Full width on mobile at the board's 52px; fit-content at 50px on desktop. */
+a.apply {
+  width: 100%;
+  min-height: 52px;
+}
+
+@media (min-width: 900px) {
+  h1  .facts {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 40px;
+    border-top: 0;
+    padding-top: 0;
+    padding-bottom: 40px;
+  }
+
+  .fact {
+    position: relative;
+    align-items: center;
+    gap: 40px;
+  }
+
+  /* The board's 1px × 20px divider. A pseudo-element rather than a real one,
+     because <dl> only admits div/dt/dd — a <span> separator would be invalid
+     markup and a stray stop in the reading order. */
+  .fact + .fact::before {
+    content: "";
+    flex-shrink: 0;
+    width: 1px;
+    height: 20px;
+    background: var(--au-rule-strong);
+  }
+
+  /* Dropped from the desktop board's composition, kept for assistive tech:
+     without the terms the row reads as three unlabelled strings. */
+  .factLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .factValue {
+    color: var(--au-body);
+    font-size: 17px;
+    line-height: 26px;
+    letter-spacing: -0.3px;
+    text-align: left;
+  }
+
+  a.apply {
+    width: auto;
+    min-height: 50px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Body — gray band. Desktop puts a contents rail beside the prose column;
+   the mobile board drops the rail entirely.
+   -------------------------------------------------------------------------- */
+
+/* Gray band, no hairlines: neither board draws a rule where the white hero
+   meets the gray, and the shared footer opens with its own 1px --au-rule
+   directly beneath this section — `au-ground-alt` would print two lines
+   where the board draws one. */
+section.body {
+  background: var(--au-ground-alt);
+  padding-top: 60px;
+  padding-bottom: 64px;
+}
+
+.bodyGrid {
+  display: flex;
+  flex-direction: column;
+}
+
+.toc {
+  display: none;
+}
+
+.tocLabel {
+  padding-bottom: 22px;
+}
+
+.tocList {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Board leading is 30px, so these sit under the 44px target guidance and
+   above the WCAG 2.2 AA 24px minimum. Desktop-only, pointer-driven, and the
+   same three anchors are reachable from the headings themselves. */
+a.tocLink {
+  display: block;
+  color: var(--au-body);
+  font-size: var(--au-t-body);
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: -0.016em;
+}
+
+/* Hover is colour only — no underline shift, no movement. */
+a.tocLink:hover {
+  color: var(--au-ink);
+}
+
+/* Sub tier, but the board sets 28/34 on mobile and 32/38 on desktop rather
+   than the tier's leading. */
+h2.h2 {
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.62px;
+  padding-bottom: 18px;
+}
+
+/* The hairline that opens each subsequent section of the column. */
+h2.h2Ruled {
+  border-top: 1px solid var(--au-rule);
+  padding-top: 36px;
+}
+
+/* Lead tier at the board's prose size: 17/27 mobile, 19/30 desktop. */
+p.prose {
+  font-size: 17px;
+  line-height: 27px;
+  letter-spacing: -0.3px;
+}
+
+.proseTight {
+  padding-bottom: 18px;
+}
+
+.proseBreak {
+  padding-bottom: 40px;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  border-top: 1px solid var(--au-rule);
+  padding-block: 18px;
+}
+
+.step:last-child {
+  padding-bottom: 40px;
+}
+
+/* Lead tier in ink: the step title is a heading in weight only, so it stays a
+   paragraph and does not add an h4 level under the h2. */
+.step .stepTitle {
+  color: var(--au-ink);
+}
+
+/* Not on the board. The route needs a way back to the index it belongs to,
+   and the column's own hairline rhythm is where it belongs. */
+.backRow {
+  margin-top: 40px;
+  border-top: 1px solid var(--au-rule);
+  padding-top: 8px;
+}
+
+a.back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--au-slate-deep);
+  font-size: var(--au-t-body);
+  font-weight: 500;
+  line-height: 25px;
+  letter-spacing: -0.016em;
+  text-decoration: underline;
+  text-decoration-color: var(--au-slate-line);
+  text-underline-offset: 3px;
+}
+
+a.back:hover {
+  color: var(--au-slate-deep-hover);
+  text-decoration-color: var(--au-slate-deep-hover);
+}
+
+@media (min-width: 900px) {
+  section.body {
+    padding-top: 104px;
+    padding-bottom: 120px;
+  }
+
+  /* The rail is 300 on the board and the column takes the rest. Both tracks
+     shrink — a fixed 300px would overflow the shell between 900 and 1440. */
+  .bodyGrid {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 96px;
+  }
+
+  .toc {
+    display: block;
+    flex: 0 1 300px;
+    min-width: 0;
+  }
+
+  .column {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  h2.h2 {
+    font-size: var(--au-t-sub);
+    line-height: 38px;
+    letter-spacing: -0.024em;
+    padding-bottom: 20px;
+  }
+
+  h2.h2Ruled {
+    padding-top: 44px;
+  }
+
+  p.prose {
+    font-size: var(--au-t-lead);
+    line-height: 30px;
+    letter-spacing: -0.018em;
+  }
+
+  .proseTight {
+    padding-bottom: 20px;
+  }
+
+  .proseBreak {
+    padding-bottom: 44px;
+  }
+
+  .step {
+    padding-block: 20px;
+  }
+
+  .step:last-child {
+    padding-bottom: 44px;
+  }
+
+  .backRow {
+    margin-top: 44px;
+    padding-top: 10px;
+  }
+}

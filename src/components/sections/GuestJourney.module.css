@@ -1,0 +1,360 @@
+/* §02 · Guest journey — mobile 390 board first, desktop 1440 board at 900px.
+   Every value measured off the Paper boards; no hue that is not a token. */
+
+/* Board padding: 64 top / 68 bottom (mobile), 120 / 128 (desktop). `au-section`
+   supplies the top value at both sizes, so only the bottom is restated here.
+   The element+class selector beats `.au-section` on specificity, so the value
+   does not depend on which stylesheet lands first — the same treatment §03,
+   §04, §05 and §07 already use. */
+section.section {
+  padding-bottom: calc(var(--au-section-pad) + 4px);
+}
+
+/* Board: 40px below the lead on mobile, 72px below the header row on desktop. */
+.header {
+  padding-bottom: 40px;
+}
+
+/* The mobile board puts 22px under the eyebrow; the shared SectionHeader ships
+   18px. Scoped here so this section matches its own board without moving the
+   shared component. The desktop value is restated in the 900px branch so it
+   never depends on stylesheet order. */
+.header :global(.au-label) {
+  padding-bottom: 22px;
+}
+
+/* Mobile stacks the rail and drops the card below it (44px, per the board).
+   Desktop is 620 / 612 with an 80px gutter — as ratios, so both columns
+   shrink between 900 and 1440 instead of overflowing. */
+.body {
+  display: grid;
+  gap: 44px;
+}
+
+/* --------------------------------------------------------------------------
+   The rail
+   -------------------------------------------------------------------------- */
+
+.steps {
+  /* One fixed-width lane, so all four markers share a vertical line. */
+  --gj-lane: 34px;
+  --gj-gap: 34px;
+  --gj-ease: cubic-bezier(0.2, 0, 0, 1);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gj-gap);
+  padding-top: 6px;
+  padding-left: var(--gj-lane);
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* One rail, from the first marker's centre to the last, positioned from
+   measurements the script writes to --gj-track-top / --gj-track-h — the steps
+   are different heights and the lane moves at the breakpoint.
+   It is the same hairline the board draws; the only thing scroll changes is
+   how much of it exists yet. It draws downward as the reader descends and
+   undraws as they go back up, because its height is a pure function of scroll
+   position. With --gj-p unset — no script, no JavaScript — it is the whole
+   rail, so the resting state is the finished one. */
+.steps::before {
+  content: "";
+  position: absolute;
+  /* The markers are 15px wide and sit flush with the left edge of .steps, so
+     their centre line is 7.5px in. This offset is measured from .steps' own
+     padding edge — not from a step's, which is where the lane padding put it
+     when the rail was drawn per step. */
+  left: 7px;
+  top: var(--gj-track-top, 12.5px);
+  width: 1px;
+  height: calc(var(--gj-p, 1) * var(--gj-track-h, calc(100% - 25px)));
+  background: var(--au-slate);
+  opacity: 0.4;
+}
+
+/* Slate core, knocked out of the rail by a ring of the section ground.
+   Slate here is a non-text mark, which is the only thing it is allowed to be. */
+.marker {
+  position: absolute;
+  left: calc(-1 * var(--gj-lane));
+  top: 5px;
+  width: 15px;
+  height: 15px;
+  border: 4px solid var(--au-ground-alt);
+  border-radius: var(--au-r-pill);
+  background: var(--au-slate);
+}
+
+/* The invoice closes the sequence, so its marker is ink. The label says so
+   too — the colour is never the only thing carrying it. */
+.markerTerminal {
+  background: var(--au-ink-2);
+}
+
+/* A step arrives whole: bullet, timestamp, sentence and note together, as the
+   rail reaches it. That is what makes the four read as a sequence rather than
+   as a list that was already there.
+   Opacity is carried by the step, so the marker fades with its own copy; the
+   8px rise is carried by the copy only, because the marker has to stay welded
+   to the rail while the rest of the step is still moving.
+   All of it applies only while the script is running, so the resting state —
+   which is what the server renders, and what reduced motion gets — is all four
+   steps present. */
+.steps[data-scrub="on"] .step {
+  transition: opacity 420ms var(--gj-ease);
+}
+
+.steps[data-scrub="on"] .step > *:not(.marker) {
+  transition: transform 420ms var(--gj-ease);
+}
+
+.steps[data-scrub="on"] .marker {
+  transition: transform 220ms var(--gj-ease);
+}
+
+.steps[data-scrub="on"] .step[data-reached="false"] {
+  opacity: 0;
+}
+
+.steps[data-scrub="on"] .step[data-reached="false"] > *:not(.marker) {
+  transform: translateY(8px);
+}
+
+.steps[data-scrub="on"] .step[data-reached="false"] .marker {
+  transform: scale(0.7);
+}
+
+.steps[data-scrub="on"] .step[data-reached="true"] {
+  opacity: 1;
+}
+
+.steps[data-scrub="on"] .step[data-reached="true"] > *:not(.marker),
+.steps[data-scrub="on"] .step[data-reached="true"] .marker {
+  transform: none;
+}
+
+.line {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: -0.42px;
+  color: var(--au-ink);
+}
+
+/* Step 1's search query. Slate-deep is the text slate; --au-slate never is. */
+.query {
+  padding-top: 6px;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: -0.36px;
+  color: var(--au-slate-deep);
+}
+
+.note {
+  padding-top: 2px;
+  color: var(--au-body);
+}
+
+/* Copy the desktop board carries and the mobile board deliberately drops. */
+.wide {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   The money card
+   -------------------------------------------------------------------------- */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--au-ground);
+  border: 1px solid var(--au-rule);
+  border-radius: var(--au-r-card);
+  overflow: hidden;
+}
+
+.cardPhoto {
+  width: 100%;
+  height: 192px;
+  flex-shrink: 0;
+}
+
+.cardBody {
+  padding: 26px 24px 24px;
+}
+
+.cardEyebrow {
+  padding-bottom: 10px;
+}
+
+.cardTitle {
+  padding-bottom: 20px;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 34px;
+  letter-spacing: -0.62px;
+  color: var(--au-ink);
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 13px;
+  border-top: 1px solid var(--au-rule);
+}
+
+/* The totals rule: one step stronger, and the row below it carries no
+   bottom padding — the card's own padding closes it. */
+.rowTotal {
+  padding-block: 13px 0;
+  border-top-color: var(--au-rule-strong);
+}
+
+.rowLabel,
+.total {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.25px;
+  color: var(--au-body);
+}
+
+.figure {
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: -0.55px;
+  color: var(--au-ink);
+}
+
+/* The ad cost sits outside the arithmetic, so it sits on its own sub-panel
+   below the totals rule rather than in the column with them. */
+.adStrip {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 24px 22px;
+  background: var(--au-ground-warm);
+  border-top: 1px solid var(--au-rule);
+}
+
+.adFigure {
+  flex-shrink: 0;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: -0.55px;
+  color: var(--au-muted);
+}
+
+.adText {
+  flex: 1;
+  min-width: 0;
+  color: var(--au-body);
+}
+
+/* Reduced motion never gets the scrub: the script returns before it sets
+   data-scrub, so the rail renders finished and nothing transitions. */
+/* Reduced motion never gets the scrub: the script returns before it sets
+   data-scrub, so the rail renders whole and nothing transitions. */
+@media (prefers-reduced-motion: reduce) {
+  .steps::before {
+    height: var(--gj-track-h, calc(100% - 25px));
+  }
+
+  .steps .step,
+  .steps .step > *,
+  .steps .marker {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Desktop 1440
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 900px) {
+  section.section {
+    padding-bottom: calc(var(--au-section-pad) + 8px);
+  }
+
+  .header {
+    padding-bottom: 72px;
+  }
+
+  .header :global(.au-label) {
+    padding-bottom: 28px;
+  }
+
+  .body {
+    grid-template-columns: minmax(0, 620fr) minmax(0, 612fr);
+    align-items: start;
+    gap: 80px;
+  }
+
+  .steps {
+    --gj-lane: 40px;
+    --gj-gap: 44px;
+  }
+
+  .line {
+    max-width: 520px;
+  }
+
+  .query {
+    padding-top: 8px;
+  }
+
+  .note {
+    max-width: 500px;
+  }
+
+  .wide {
+    display: inline;
+  }
+
+  .cardPhoto {
+    height: 252px;
+  }
+
+  .cardBody {
+    padding: 32px 32px 30px;
+  }
+
+  .cardEyebrow {
+    padding-bottom: 12px;
+  }
+
+  .cardTitle {
+    padding-bottom: 24px;
+    font-size: var(--au-t-sub);
+    line-height: 36px;
+    letter-spacing: -0.024em;
+  }
+
+  .row {
+    gap: 20px;
+    padding-block: 14px;
+  }
+
+  .rowTotal {
+    padding-block: 14px 0;
+  }
+
+  .adStrip {
+    gap: 20px;
+    padding: 22px 32px 24px;
+  }
+}

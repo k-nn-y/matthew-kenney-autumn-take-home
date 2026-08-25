@@ -1,0 +1,97 @@
+/* Phone-only persistent action, specified on the "States beyond the happy path"
+   board: the mobile page runs to ~11,000px and the hero actions leave the screen
+   at about 655px, so without this the next pressable thing is 9,400px away.
+   Progressive enhancement — mounted by JS, so with JS off it never exists and
+   the page is still fully actionable from the hero and the footer. */
+.wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  padding: 0 24px calc(16px + env(safe-area-inset-bottom, 0px));
+  transform: translateY(calc(100% + 16px));
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 240ms ease-out, opacity 240ms ease-out;
+}
+
+.shown {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  width: 100%;
+  padding: 8px 12px 8px 16px;
+  border-radius: var(--au-r-btn);
+  background: var(--au-ink-2);
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.address {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.013em;
+  color: var(--au-on-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.01em;
+  color: var(--au-on-ink-muted);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 44px;
+  padding-inline: 16px;
+  border-radius: var(--au-r-btn);
+  background: var(--au-on-ink);
+  color: var(--au-ink-2);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: -0.013em;
+  transition: background-color 120ms ease-out;
+}
+
+.cta:hover {
+  background: #ffffff;
+}
+
+@media (min-width: 900px) {
+  .wrap {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrap,
+  .cta {
+    transition: none;
+  }
+
+  .wrap {
+    transform: none;
+  }
+}

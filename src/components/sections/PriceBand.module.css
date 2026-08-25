@@ -1,0 +1,192 @@
+/* Price band — the one inverted ground on the page. Values measured off
+   "Price band · from v2" on the Desktop 1440 (v3) and Mobile 390 (v3) boards.
+   Mobile is the base; the single 900px breakpoint carries desktop. */
+
+.band {
+  background: var(--au-ink-ground);
+  color: var(--au-on-ink);
+  padding-block: 44px 40px;
+}
+
+/* --- Band lead --------------------------------------------------------- */
+
+.lead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 28px;
+}
+
+.band .lead {
+  color: var(--au-on-ink-muted);
+}
+
+/* --- The three figures ------------------------------------------------- */
+
+.columns {
+  display: flex;
+  flex-direction: column;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Mobile: three stacked rows, hairline between them. */
+.col:first-child {
+  padding-bottom: 26px;
+}
+
+.col:nth-child(2) {
+  border-top: 1px solid var(--au-rule-on-ink);
+  padding-block: 26px;
+}
+
+.col:last-child {
+  border-top: 1px solid var(--au-rule-on-ink);
+  padding-block: 26px 30px;
+}
+
+.figure {
+  font-size: 52px;
+  font-weight: 500;
+  line-height: 52px;
+  letter-spacing: -1.46px;
+  color: var(--au-on-ink);
+}
+
+.band .colLabel,
+.band .colNote {
+  color: var(--au-on-ink);
+}
+
+/* The OTA column is recessive: weaker ink, plus the words "leaves your
+   property". Never hue — this reads the same in greyscale. */
+.band .recessive .colLabel,
+.band .recessive .figure,
+.band .recessive .colNote {
+  color: var(--au-on-ink-muted);
+}
+
+/* --- Closing line + reassurance ---------------------------------------- */
+
+.close {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-top: 1px solid var(--au-rule-on-ink);
+  padding-top: 30px;
+}
+
+.closeLine {
+  font-size: var(--au-t-band-lead);
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: -0.019em;
+  color: var(--au-on-ink);
+}
+
+/* Mobile: "NO FIXED FEES · NO AGENCY PREMIUM" on one line, the contract
+   line beneath it. The separator is decorative, so it is a hidden span
+   rather than punctuation a screen reader would read out. It trails the
+   first item so that a wrap below 360px never opens a line with it. */
+.reassure {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Compound so the band's ink and the board's 20px leading always beat
+   .au-label, whatever order the stylesheets land in. */
+.band .reassure {
+  color: var(--au-on-ink);
+  line-height: 20px;
+}
+
+.reassure li:last-child {
+  flex-basis: 100%;
+}
+
+.sep {
+  padding-inline: 6px;
+}
+
+@media (min-width: 900px) {
+  .band {
+    padding-block: 64px 56px;
+  }
+
+  .lead {
+    padding-bottom: 44px;
+  }
+
+  /* Three columns that shrink: no fixed widths between 900 and 1440.
+     Subgrid keeps label, figure and note on shared rows, so the figures
+     stay aligned once a long column label wraps below about 1425px.
+     Without subgrid support the columns simply size themselves. */
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    row-gap: 16px;
+  }
+
+  .col {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 3;
+    min-width: 0;
+    gap: 16px;
+  }
+
+  .col:first-child {
+    padding: 0 40px 0 0;
+  }
+
+  .col:nth-child(2) {
+    border-top: 0;
+    border-left: 1px solid var(--au-rule-on-ink);
+    padding: 0 40px;
+  }
+
+  .col:last-child {
+    border-top: 0;
+    border-left: 1px solid var(--au-rule-on-ink);
+    padding: 0 0 0 40px;
+  }
+
+  .figure {
+    font-size: 60px;
+    line-height: 60px;
+    letter-spacing: -1.8px;
+  }
+
+  .colNote {
+    max-width: 280px;
+  }
+
+  .close {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    margin-top: 48px;
+    padding-top: 48px;
+  }
+
+  .closeLine {
+    flex: 0 1 820px;
+    min-width: 0;
+  }
+
+  .reassure {
+    display: block;
+    flex: 0 0 200px;
+    text-align: right;
+  }
+
+  .sep {
+    display: none;
+  }
+}

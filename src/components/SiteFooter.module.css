@@ -1,0 +1,355 @@
+/* Footer — board "Homepage — On brand (v2)": ERJ-0 desktop, EY3-0 mobile.
+   Both boards draw the footer on --au-ground-alt with --au-ink display,
+   --au-body running text and --au-muted captions, opened by a 1px --au-rule
+   hairline — the same alternation every other section uses. It is NOT an
+   inverted band: docs/DESIGN.md is explicit that "exactly one band on the
+   page is printed on ink: the price", and the page already spends that
+   band on PriceBand. */
+
+.footer {
+  background: var(--au-ground-alt);
+  color: var(--au-ink);
+  border-top: 1px solid var(--au-rule);
+  padding-top: 56px;
+}
+
+/* --- the reply block ---------------------------------------------------- */
+
+.reply {
+  display: flex;
+  flex-direction: column;
+}
+
+.replyText {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding-bottom: 32px;
+}
+
+/* Address and confirmation share one wrapping row. The confirmation is the
+   last item on the line, so it can never push anything when it appears. */
+.addressRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  column-gap: 20px;
+  row-gap: 12px;
+}
+
+/* The address is the copy control, and it is still text: user-select stays on
+   so a reader can drag-select it exactly as before, which is the whole
+   fallback on a device with no mail client.
+   The board's 34/56px was set for the 16-character `aaryan@autumn.co`; the
+   live address is 25 characters. At the board's literal 34px the domain
+   breaks mid-word onto a third line, so mobile caps at 30px — which lands
+   the break on the "@", the one place an email should break. */
+.address {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  color: var(--au-ink);
+  font-family: inherit;
+  font-size: clamp(24px, 7.4vw, 30px);
+  font-weight: 500;
+  line-height: 1.294;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* The affordance is a hairline that arrives on hover — the page's own device,
+   not an underline it never uses anywhere else. */
+.addressText {
+  min-width: 0;
+  border-bottom: 1px solid transparent;
+  transition: border-color 120ms ease-out;
+}
+
+button.address:hover .addressText,
+button.address:focus-visible .addressText {
+  border-bottom-color: var(--au-rule-strong);
+}
+
+/* Copied: the rule under the address goes to full ink for the confirmation
+   window. It names what went to the clipboard — the thing you were reading,
+   not the control beside it. */
+button.address[data-copied="true"] .addressText {
+  border-bottom-color: var(--au-ink);
+}
+
+/* Colour only. A button's arrow can step 2px because it points somewhere;
+   a copy icon has nowhere to go, and nothing on this page moves on hover. */
+/* The glyph slot. Both marks are stacked in it at the same size, so the swap
+   is a change of state and never a change of layout — nothing on this line
+   moves when the address is copied. */
+.glyph {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-self: center;
+  width: 18px;
+  height: 18px;
+  color: var(--au-muted);
+  transition: color 120ms ease-out;
+}
+
+.copyIcon,
+.checkIcon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 140ms ease-out;
+}
+
+.checkIcon {
+  opacity: 0;
+  color: var(--au-ink);
+}
+
+/* The check draws itself in, then holds. 260ms — long enough to read as a
+   gesture, short enough that it is over before you look for it. */
+.glyph[data-copied="true"] .copyIcon {
+  opacity: 0;
+}
+
+.glyph[data-copied="true"] .checkIcon {
+  opacity: 1;
+}
+
+.glyph[data-copied="true"] .checkIcon path {
+  animation: draw 260ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@keyframes draw {
+  from {
+    stroke-dasharray: 15;
+    stroke-dashoffset: 15;
+  }
+
+  to {
+    stroke-dasharray: 15;
+    stroke-dashoffset: 0;
+  }
+}
+
+button.address:hover .glyph,
+button.address:focus-visible .glyph {
+  color: var(--au-ink);
+}
+
+button.address:active .glyph {
+  transition-duration: 80ms;
+}
+
+/* Reduced motion still gets the confirmation — it is a state change, not a
+   flourish. It simply arrives instead of being drawn. */
+@media (prefers-reduced-motion: reduce) {
+  .addressText,
+  .glyph,
+  .copyIcon,
+  .checkIcon {
+    transition: none;
+  }
+
+  .glyph[data-copied="true"] .checkIcon path {
+    animation: none;
+  }
+}
+
+p.status {
+  flex-shrink: 0;
+}
+
+/* 17px is the reply-block size docs/DESIGN.md names beside the tier list;
+   it is not an off-system value. Tracking follows the ramp at 20 and below. */
+.reassurance {
+  color: var(--au-body);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: -0.018em;
+}
+
+.cta {
+  margin-bottom: 44px;
+}
+
+.cta :global(.au-btn) {
+  width: 100%;
+  min-height: 54px;
+  padding-inline: 24px;
+}
+
+/* --- the bottom bar ----------------------------------------------------- */
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--au-rule);
+  padding-top: 22px;
+  padding-bottom: 26px;
+}
+
+/* The mark is filled sash-black off currentColor, per docs/DESIGN.md. */
+.mark {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: var(--au-ink-2);
+}
+
+/* Each board words the site line its own way. The hidden one is out of the
+   accessibility tree, so nothing is announced twice. */
+p.place,
+p.copyright {
+  display: none;
+}
+
+p.siteLine {
+  text-align: right;
+}
+
+/* --- desktop 1440 ------------------------------------------------------- */
+
+@media (min-width: 900px) {
+  .footer {
+    padding-top: 104px;
+  }
+
+  .reply {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 80px;
+    padding-bottom: 88px;
+  }
+
+  .replyText {
+    flex: 1 1 auto;
+    gap: 16px;
+    padding-bottom: 0;
+  }
+
+  /* 56px at 1440; shrinks with the column so it never overflows between
+     900 and 1440. A fixed 56px would. */
+  .address {
+    gap: 16px;
+    font-size: clamp(34px, 4.2vw, 56px);
+    line-height: 1.036;
+    letter-spacing: -0.03em;
+  }
+
+  /* The address more than doubles at this breakpoint; a 16px icon beside
+     56px display type reads as a speck. */
+  .copyIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .cta {
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+
+  .cta :global(.au-btn) {
+    width: auto;
+    min-height: 52px;
+    padding-left: 26px;
+    padding-right: 24px;
+  }
+
+  .bar {
+    gap: 40px;
+    padding-top: 26px;
+    padding-bottom: 28px;
+  }
+
+  p.place,
+  p.copyright {
+    display: block;
+  }
+
+  p.siteLine {
+    display: none;
+  }
+}
+
+/* The mobile board sets the footer mark at 80x12, the desktop board at 88x13. */
+.logo {
+  width: 80px;
+  height: 12px;
+}
+
+@media (min-width: 900px) {
+  .logo {
+    width: 88px;
+    height: 13px;
+  }
+}
+
+/* --- the sitemap -------------------------------------------------------- */
+
+.sitemap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px 24px;
+  padding-bottom: 48px;
+  border-top: 1px solid var(--au-rule);
+  padding-top: 40px;
+}
+
+.column {
+  min-width: 0;
+}
+
+.columnLabel {
+  padding-bottom: 14px;
+}
+
+.columnLinks {
+  display: flex;
+  flex-direction: column;
+}
+
+.sitemapLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--au-body);
+  font-size: var(--au-t-body);
+  font-weight: 500;
+  line-height: 25px;
+  letter-spacing: -0.016em;
+  transition: color 100ms ease-out;
+}
+
+.sitemapLink:hover {
+  color: var(--au-ink);
+}
+
+@media (min-width: 900px) {
+  .sitemap {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px;
+    padding-top: 48px;
+    padding-bottom: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sitemapLink {
+    transition: none;
+  }
+}

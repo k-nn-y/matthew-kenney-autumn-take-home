@@ -1,0 +1,100 @@
+/* /product/search — measured off "Product · Search · Desktop 1440" and
+   "· Mobile 390". Mobile is the base; the one 900px breakpoint is desktop.
+   Section padding (64/68 mobile, 120/128 desktop) is exactly au-section, so
+   the band restates nothing. */
+
+/* The full-bleed photograph band. The board's image — a village steeple under
+   fall colour — is not among the five photographs in /public/images, so this
+   renders the plate alone: au-photo already fills ground-warm, which is the
+   system's own pre-decode state. Dropping a <Photo> inside it later needs no
+   change here. Heights are the board's: 280 mobile, 420 desktop. */
+.plate {
+  width: 100%;
+  height: 280px;
+}
+
+.header {
+  padding-bottom: 40px;
+}
+
+.headerLabel {
+  padding-bottom: 22px;
+}
+
+/* au-section-h2 already carries 36px/-0.026em on mobile and 60/58/-0.03em on
+   desktop. Only the mobile leading differs from the tier: this board sets 38,
+   two above it, the same two /careers restates on its own board headline. */
+.header .headline {
+  line-height: 38px;
+}
+
+/* Three columns, each opened by a 1.5px sash-black rule and nothing else —
+   no card, no border, no shadow. Mobile stacks them; the 30px gap is the
+   board's 30px bottom padding on every column but the last. */
+.surfaces {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.surface {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding-top: 20px;
+  border-top: 1.5px solid var(--au-ink-2);
+}
+
+/* Sub tier, but the mobile board sets 28/34 rather than the 26px token. */
+.surface .title {
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.62px;
+}
+
+@media (min-width: 900px) {
+  /* The shared PageHero prints 104/96 here; this board asks for 120/104, so
+     the remainder is padding on the wrapper rather than an edit to a
+     component five other routes share. Mobile already agrees at 56/56. */
+  .heroPad {
+    padding-top: 16px;
+    padding-bottom: 8px;
+  }
+
+  .plate {
+    height: 420px;
+  }
+
+  .header {
+    padding-bottom: 64px;
+  }
+
+  .headerLabel {
+    padding-bottom: 28px;
+  }
+
+  /* Back to the tier: the desktop board and .au-section-h2 both say 58. */
+  .header .headline {
+    line-height: 58px;
+  }
+
+  /* Equal columns that shrink: flex-basis 0 plus min-width 0, never a fixed
+     px width, so 900 → 1440 reflows instead of overflowing. */
+  .surfaces {
+    flex-direction: row;
+    gap: 40px;
+  }
+
+  .surface {
+    flex: 1 1 0;
+    gap: 14px;
+    padding-top: 22px;
+  }
+
+  .surface .title {
+    font-size: var(--au-t-sub);
+    line-height: 36px;
+    letter-spacing: -0.024em;
+  }
+}

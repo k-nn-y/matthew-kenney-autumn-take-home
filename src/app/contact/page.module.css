@@ -1,0 +1,137 @@
+/* /contact — "Contact · Mobile 390" is the base, "Contact · Desktop 1440" is
+   the 900px branch. The page is one block between the shared nav and footer:
+   64/72 of vertical padding on mobile, 140/140 on desktop, so it does not use
+   .au-section (which publishes 64/68 and 120/128).
+
+   There are no inputs on this page and there is no motion on it. */
+
+.page {
+  padding-top: 64px;
+  padding-bottom: 72px;
+}
+
+/* Display tier. Desktop is byte-identical to .au-section-h2 (60/58/-0.03em);
+   the mobile board opens the leading two pixels, so only that is restated. */
+h1.reply {
+  border-top: 1px solid var(--au-rule);
+  padding-top: 32px;
+}
+
+.replyLabel {
+  padding-bottom: 14px;
+}
+
+/* The address is content, not a control: printed, selectable, and repeated by
+   the mailto below it rather than hidden inside it. `anywhere` is the backstop
+   under the <wbr> in the markup — a long address may never open a scrollbar. */
+.address {
+  padding-bottom: 20px;
+  color: var(--au-ink);
+  font-variation-settings: "opsz" 32;
+  font-size: 34px;
+  font-weight: 500;
+  line-height: 44px;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+
+.action {
+  margin-bottom: 44px;
+}
+
+/* Mobile: a full-width 52px bar, exactly what .au-btn already measures. */
+.action :global(.au-btn) {
+  width: 100%;
+}
+
+.briefLabel {
+  padding-bottom: 20px;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hairline above every row and one below the last: a ruled list, not cards. */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding-block: 18px;
+  border-top: 1px solid var(--au-rule);
+}
+
+.row:last-child {
+  border-bottom: 1px solid var(--au-rule);
+}
+
+/* Lead tier, but the row title is ink where a lead is body. Element+class so
+   the override does not depend on which stylesheet the router lands first. */
+h3.rowTitle {
+  color: var(--au-ink);
+}
+
+.footnote {
+  padding-top: 24px;
+}
+
+@media (min-width: 900px) {
+  /* 760 : 456 across the 1312 shell with 96 between them — exactly the board's
+     figures at 1440, as a ratio rather than two fixed widths, so the pair
+     shrinks together from 1440 down to the breakpoint instead of overflowing. */
+  .page {
+    display: grid;
+    grid-template-columns: minmax(0, 760fr) minmax(0, 456fr);
+    column-gap: 96px;
+    align-items: start;
+    padding-top: 140px;
+    padding-bottom: 140px;
+  }
+
+  h1  .reply {
+    padding-top: 40px;
+  }
+
+  /* The board sets 56/60 for the 16-character `aaryan@autumn.co`; the live
+     address is 25 characters and measures 769px at 56px — wider than the 760px
+     column it is drawn in, so the board's literal size breaks the display line
+     in two at the board's own width. 54px is the largest that keeps it on one
+     line at 1440 (741px, and still one line once a classic scrollbar takes
+     15px off the shell). Below about 1230px the column is narrower than that
+     and the <wbr> takes the break to the "@". 60/56 as a ratio keeps the
+     board's leading at every size on the ramp. */
+  .address {
+    padding-bottom: 16px;
+    font-size: clamp(44px, 4.4vw, 54px);
+    line-height: 1.0714;
+    letter-spacing: -0.03em;
+  }
+
+  /* 18px under the address's own 16px, and the column's stack ends here. */
+  .action {
+    margin-top: 18px;
+    margin-bottom: 0;
+  }
+
+  /* Intrinsic width at 54px tall: the board pads this one 15 top, 24 right,
+     15 bottom, 26 left, rather than the global .au-btn 14/22/14/24. */
+  .action :global(.au-btn) {
+    width: auto;
+    padding: 15px 24px 15px 26px;
+  }
+
+  /* The right column starts 8px low, so its label sits on the CONTACT label. */
+  .brief {
+    padding-top: 8px;
+  }
+
+  .briefLabel {
+    padding-bottom: 24px;
+  }
+
+  .footnote {
+    padding-top: 26px;
+  }
+}

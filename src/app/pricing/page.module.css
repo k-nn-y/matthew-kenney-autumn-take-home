@@ -1,0 +1,528 @@
+/* /pricing — every value measured off the boards "Pricing · Desktop 1440"
+   and "Pricing · Mobile 390". Mobile 390 is the base; the single 900px
+   breakpoint carries the desktop board, as everywhere else on the site.
+
+   No motion of any kind lives on this page: nothing fades, nothing counts up,
+   nothing moves on hover. The only transitions on screen belong to the shared
+   header, footer and button, which own their own reduced-motion opt-outs. */
+
+/* --------------------------------------------------------------------------
+   Opener
+
+   The board top-aligns the lead with the first line of the headline; the
+   shared PageHero bottom-aligns it, which on a three-line headline drops the
+   lead most of a hundred pixels down the page. Corrected here, structurally,
+   rather than by forking a component four other routes depend on.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 900px) {
+  .hero > div {
+    align-items: start;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   The price — the route's one inverted ground.
+   Board padding: 52 / 48 mobile, 88 / 84 desktop.
+   -------------------------------------------------------------------------- */
+
+.price {
+  background: var(--au-ink-ground);
+  color: var(--au-on-ink);
+  padding-block: 52px 48px;
+}
+
+/* Compound with .price so the band's ink always beats .au-label, whatever
+   order the stylesheets land in. */
+.price .priceLabel,
+.price .asideLabel {
+  color: var(--au-on-ink-muted);
+}
+
+.priceLabel {
+  padding-bottom: 14px;
+}
+
+/* The largest figure on the site, and the only one at this size. Tabular by
+   token, and again by the board's own "tnum" — 13% is arithmetic. */
+.figure {
+  font-size: 80px;
+  font-weight: 500;
+  line-height: 76px;
+  letter-spacing: -2.4px;
+  color: var(--au-on-ink);
+  padding-bottom: 16px;
+}
+
+.figureNote {
+  font-size: var(--au-t-lead);
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: -0.018em;
+  color: var(--au-on-ink);
+  padding-bottom: 36px;
+}
+
+/* Mobile: the hairline runs across the column. Desktop turns it upright and
+   it becomes the aside's left border. */
+.asideLabel {
+  border-top: 1px solid var(--au-rule-on-ink);
+  margin-top: 4px;
+  padding-top: 32px;
+  padding-bottom: 18px;
+}
+
+.fee {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--au-rule-on-ink);
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+}
+
+.fee:last-child {
+  border-bottom: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.feeTerm,
+.feeValue {
+  min-width: 0;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: -0.32px;
+}
+
+.feeTerm {
+  color: var(--au-on-ink);
+}
+
+/* Recessive ink, and the word is "None" — this reads the same in greyscale. */
+.feeValue {
+  color: var(--au-on-ink-muted);
+  text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+   Worked months
+   -------------------------------------------------------------------------- */
+
+/* Board: 64 / 68 mobile, 120 / 128 desktop — au-section exactly at both. */
+.monthsLabel {
+  padding-bottom: 22px;
+}
+
+.monthsHeadline {
+  padding-bottom: 18px;
+}
+
+.monthsHeader {
+  padding-bottom: 36px;
+}
+
+/* Column heads belong to the desktop table only. */
+.tableHead {
+  display: none;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mobile: one card per month. White on white with a hairline and a 20px
+   radius, per the board — no shadow, and the only dashed border on the site
+   is the homepage's, so this one is solid. */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  border: 1px solid var(--au-rule);
+  border-radius: var(--au-r-card);
+  padding: 24px;
+}
+
+.row + .row {
+  margin-top: 14px;
+}
+
+/* The month we drove nothing sits on the warm plate at both widths. It is the
+   month the section exists to show, so it is marked, not hidden. */
+.rowZero {
+  background: var(--au-ground-warm);
+}
+
+.monthName {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: -0.3px;
+  color: var(--au-ink);
+}
+
+/* No align-items: the board leaves it at stretch, which lands the 12px cap
+   label and the 22px numeral on very nearly the same cap line. */
+.measure {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+  border-top: 1px solid var(--au-rule);
+  padding-top: 12px;
+}
+
+/* The mobile zero card drops this column outright, exactly as drawn. */
+.measureDesktopOnly {
+  display: none;
+}
+
+/* Figures do not wrap; the label beside them does. Reversed, a card at 320px
+   pushes "$11,160" past the hairline and the page grows a scrollbar. */
+.measureValue {
+  flex-shrink: 0;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: -0.42px;
+  color: var(--au-ink);
+  text-align: right;
+}
+
+.measureMuted {
+  color: var(--au-muted);
+}
+
+/* The zero month's last cell is a sentence, so it is set as prose — and it
+   shrinks, where a figure never should. */
+.measureSentence {
+  flex-shrink: 1;
+  min-width: 0;
+  font-size: var(--au-t-caption);
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: -0.15px;
+  color: var(--au-body);
+  text-align: left;
+}
+
+/* Present for a screen reader, out of sight for everyone else. The sentence
+   cell is drawn without its label at every width; the figure cells lose
+   theirs only on desktop, where the column head carries it. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.measureLabel {
+  min-width: 0;
+}
+
+.footnote {
+  padding-top: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   Flagship + the price questions
+   Board padding: 64 / 68 mobile (au-section exactly), 112 / 120 desktop.
+   -------------------------------------------------------------------------- */
+
+.flagshipLabel {
+  padding-bottom: 22px;
+}
+
+.flagshipHeadline {
+  font-variation-settings: "opsz" 32;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 36px;
+  letter-spacing: -0.77px;
+  color: var(--au-ink);
+  padding-bottom: 18px;
+}
+
+.flagshipLead {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 27px;
+  letter-spacing: -0.3px;
+  color: var(--au-body);
+  padding-bottom: 24px;
+}
+
+/* The board's mobile CTA is a full-width 52px bar; desktop is intrinsic.
+   Compound with .flagship so this always outranks .au-btn. */
+.flagship :global(.au-btn) {
+  width: 100%;
+  min-height: 52px;
+}
+
+/* Mobile: the CTA and the questions are one column, 44px apart. */
+.flagship {
+  min-width: 0;
+  padding-bottom: 44px;
+}
+
+.faq {
+  min-width: 0;
+}
+
+.faqLabel {
+  padding-bottom: 20px;
+}
+
+.faqRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid var(--au-rule);
+  padding-block: 20px;
+}
+
+.faqRow:last-child {
+  border-bottom: 1px solid var(--au-rule);
+}
+
+.faq .faqQuestion {
+  color: var(--au-ink);
+}
+
+.faqAnswer {
+  overflow-wrap: break-word;
+}
+
+/* --------------------------------------------------------------------------
+   Desktop 1440
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 900px) {
+  /* --- The price ------------------------------------------------------- */
+
+  .price {
+    padding-block: 88px 84px;
+  }
+
+  /* Two equal columns that shrink, split by the hairline the board draws as
+     a rectangle between them. 56px of air on each side of it. */
+  .priceGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .priceMain {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding-right: 56px;
+  }
+
+  .priceAside {
+    border-left: 1px solid var(--au-rule-on-ink);
+    padding-left: 56px;
+  }
+
+  .priceLabel,
+  .figure {
+    padding-bottom: 0;
+  }
+
+  .figure {
+    font-size: 120px;
+    line-height: 112px;
+    letter-spacing: -3.6px;
+  }
+
+  .figureNote {
+    max-width: 380px;
+    padding-bottom: 0;
+  }
+
+  .asideLabel {
+    border-top: 0;
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 26px;
+  }
+
+  .fee {
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+  }
+
+  .feeTerm,
+  .feeValue {
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -0.36px;
+  }
+
+  /* --- Worked months --------------------------------------------------- */
+
+  /* The shared section opener's geometry: label across the top, then a 700
+     headline and a 480 lead pushed to the two edges. Both tracks shrink, so
+     900 → 1440 reflows without overflow. */
+  .monthsHeader {
+    display: grid;
+    grid-template-columns: minmax(0, 700px) minmax(0, 480px);
+    justify-content: space-between;
+    column-gap: 60px;
+    align-items: start;
+    padding-bottom: 56px;
+  }
+
+  .monthsLabel {
+    grid-column: 1 / -1;
+    padding-bottom: 28px;
+  }
+
+  .monthsHeadline {
+    padding-bottom: 0;
+  }
+
+  /* One grid, shared by the column heads and every row, so a wrapped head
+     can never fall out of line with the figures beneath it. Proportional
+     tracks (512 : 210 : 210 : 180 : 200 off the 1312 shell), never fixed
+     widths — those overflow everywhere between 900 and 1440. */
+  .tableHead,
+  .row {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 512fr) minmax(0, 210fr) minmax(0, 210fr)
+      minmax(0, 180fr) minmax(0, 200fr);
+    align-items: baseline;
+  }
+
+  .tableHead {
+    border-bottom: 1.5px solid var(--au-ink-2);
+    padding-bottom: 16px;
+  }
+
+  .tableHead p + p {
+    text-align: right;
+  }
+
+  .row {
+    gap: 0;
+    border: 0;
+    border-bottom: 1px solid var(--au-rule);
+    border-radius: 0;
+    padding: 24px 0;
+  }
+
+  .row + .row {
+    margin-top: 0;
+  }
+
+  /* The plate is inset from the type, not from the shell, so the zero row's
+     text steps 20px in from the rows above it — exactly as drawn. */
+  .rowZero .monthName {
+    padding-left: 20px;
+  }
+
+  .rowZero .measure:last-child {
+    padding-right: 20px;
+  }
+
+  .monthName {
+    min-width: 0;
+    color: var(--au-body);
+  }
+
+  .measure {
+    display: block;
+    border-top: 0;
+    padding-top: 0;
+    text-align: right;
+  }
+
+  .measureDesktopOnly {
+    display: block;
+  }
+
+  .measureValue {
+    display: block;
+    font-size: 26px;
+    line-height: 32px;
+    letter-spacing: -0.55px;
+  }
+
+  .measureSentence {
+    font-size: 17px;
+    line-height: 26px;
+    letter-spacing: -0.3px;
+    /* The desktop board sets this cell in muted; the mobile card sets the
+       same sentence in body, because there it is the card's last word. */
+    color: var(--au-muted);
+    text-align: right;
+  }
+
+  /* The column head carries the label at this width, so the per-cell copy
+     stays in the markup and leaves the page. */
+  .measureLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .footnote {
+    max-width: 760px;
+    padding-top: 22px;
+  }
+
+  /* --- Flagship + the price questions ---------------------------------- */
+
+  section.close {
+    padding-block: 112px 120px;
+  }
+
+  /* 620 : 596 off the 1312 shell with a 96px gutter, as fr so the pair
+     shrinks together rather than overflowing below board width. */
+  .closeGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 620fr) minmax(0, 596fr);
+    column-gap: 96px;
+    align-items: start;
+  }
+
+  .flagship {
+    padding-bottom: 0;
+  }
+
+  .flagshipHeadline {
+    font-size: 44px;
+    line-height: 48px;
+    letter-spacing: -1.23px;
+    padding-bottom: 22px;
+  }
+
+  .flagshipLead {
+    font-size: var(--au-t-lead);
+    line-height: 28px;
+    letter-spacing: -0.018em;
+    padding-bottom: 32px;
+  }
+
+  .flagship :global(.au-btn) {
+    width: auto;
+    min-height: 50px;
+  }
+
+  .faqLabel {
+    padding-bottom: 24px;
+  }
+}

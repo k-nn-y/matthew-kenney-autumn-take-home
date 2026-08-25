@@ -1,0 +1,411 @@
+/* ==========================================================================
+   §04 Proof — the card wall.
+   Mobile-390 board is the base; the desktop-1440 board is the single
+   min-width: 900px branch. Every value below is read off the Paper boards
+   (desktop ENI-0, mobile EUA-0), not eyeballed from a render.
+   ========================================================================== */
+
+/* au-section already lays in the board's 64 / 120 top pad; the board's bottom
+   pad runs 4px (mobile) and 8px (desktop) longer than its top. */
+section.section {
+  padding-bottom: calc(var(--au-section-pad) + 4px);
+}
+
+.head {
+  padding-bottom: 32px;
+}
+
+/* The board's eyebrow sits 22px above the headline on mobile. Scoped so the
+   shared SectionHeader is not edited. */
+.head :global(.au-label) {
+  padding-bottom: 22px;
+}
+
+/* --------------------------------------------------------------------------
+   The wall. Mobile: one column, 16px gap, in board order — metric, quote,
+   metric, reserved, expander, then the two revealed cards.
+   Desktop: two wrapped rows of three, each row sized independently, because
+   the board does not use a uniform 3x2 grid.
+   -------------------------------------------------------------------------- */
+.wall {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* The entry reveal. `armed` is only ever set by the client, so the resting
+   state — the one the server renders — is the finished wall. Cards rise 28px
+   over 600ms in reading order, 70ms apart: slow enough to read as arriving
+   rather than as a grid snapping into place. */
+.wall[data-motion="armed"] .card {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+/* The backstop state: visible, with no transition to depend on. */
+.wall[data-motion="shown"] .card {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.wall[data-motion="run"] .card {
+  opacity: 1;
+  transform: none;
+  transition: opacity 600ms ease-out,
+    transform 600ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.wall[data-motion="run"] .card:nth-child(2) {
+  transition-delay: 70ms;
+}
+
+.wall[data-motion="run"] .card:nth-child(3) {
+  transition-delay: 140ms;
+}
+
+.wall[data-motion="run"] .card:nth-child(4) {
+  transition-delay: 210ms;
+}
+
+.wall[data-motion="run"] .card:nth-child(5) {
+  transition-delay: 280ms;
+}
+
+.wall[data-motion="run"] .card:nth-child(6) {
+  transition-delay: 350ms;
+}
+
+.wall[data-motion="run"] .card:nth-child(7) {
+  transition-delay: 420ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wall[data-motion] .card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Collapsed is a mobile-only state and only ever set once the button mounts. */
+.wall[data-collapsed="true"] .extra {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Card shells
+   -------------------------------------------------------------------------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--au-ground);
+  border: 1px solid var(--au-rule);
+  border-radius: var(--au-r-card);
+}
+
+/* --- Photo + metric ------------------------------------------------------ */
+.photoCard {
+  overflow: hidden;
+}
+
+.photo {
+  width: 100%;
+  height: 196px;
+  flex-shrink: 0;
+}
+
+.photoBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 26px 26px 24px;
+}
+
+.figure {
+  color: var(--au-ink);
+  font-size: 52px;
+  font-weight: 500;
+  line-height: 54px;
+  letter-spacing: -0.028em;
+}
+
+.metricLabel {
+  color: var(--au-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.0156em;
+}
+
+/* The provenance prints at the rank of the figure, not as a footnote: it
+   keeps body ink, not muted, and sits above the card's bottom padding. */
+.provenance {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--au-rule);
+}
+
+.provenanceWide {
+  gap: 14px;
+}
+
+p.provText {
+  color: var(--au-body);
+}
+
+/* --- Quote --------------------------------------------------------------- */
+.quoteCard {
+  padding: 32px 30px 28px;
+}
+
+.quoteFigure {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
+  min-width: 0;
+}
+
+.quoteText {
+  color: var(--au-ink);
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 36px;
+  letter-spacing: -0.021em;
+}
+
+/* Bottom-anchored, so within a row every attribution's last line lands on
+   one baseline — the cards are equal height and share a bottom padding. */
+.attrib {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 18px;
+  border-top: 1px solid var(--au-rule);
+}
+
+.attribName {
+  color: var(--au-ink);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.0156em;
+}
+
+/* --- Guest note ---------------------------------------------------------- */
+.noteCard {
+  padding: 30px;
+}
+
+.noteFigure {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  min-width: 0;
+}
+
+.noteTop {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.noteText {
+  color: var(--au-ink);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: -0.018em;
+}
+
+.noteFoot {
+  padding-top: 18px;
+  border-top: 1px solid var(--au-rule);
+}
+
+/* --- Reserved: the only dashed border on the page ------------------------ */
+.reservedCard {
+  background: none;
+  border: 1px dashed var(--au-rule-strong);
+  padding: 30px;
+}
+
+.reservedInner {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  min-width: 0;
+}
+
+.reservedTop {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border: 1px solid var(--au-rule-strong);
+  border-radius: 8px;
+}
+
+.markDash {
+  display: block;
+  width: 12px;
+  height: 1.5px;
+  background: var(--au-muted);
+}
+
+.reservedText {
+  color: var(--au-body);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: -0.018em;
+}
+
+.reservedFoot {
+  padding-top: 18px;
+  border-top: 1px solid var(--au-rule);
+}
+
+/* --------------------------------------------------------------------------
+   Mobile expander. 56px tall, so the target clears 44px. The chevron flips
+   with a static transform — there is no transition, because this section is
+   allowed no motion.
+   -------------------------------------------------------------------------- */
+.expanderItem {
+  display: block;
+}
+
+.expanderBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 56px;
+  padding-inline: 20px;
+  text-align: left;
+  background: var(--au-ground-warm);
+  border: 1px solid var(--au-rule);
+  border-radius: var(--au-r-btn);
+  color: var(--au-body);
+}
+
+span.expanderLabel {
+  flex: 1 1 0;
+  min-width: 0;
+  color: var(--au-body);
+}
+
+.chevron {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* ==========================================================================
+   Desktop 1440
+   ========================================================================== */
+@media (min-width: 900px) {
+  section.section {
+    padding-bottom: calc(var(--au-section-pad) + 8px);
+  }
+
+  .head {
+    padding-bottom: 56px;
+  }
+
+  .head :global(.au-label) {
+    padding-bottom: 28px;
+  }
+
+  /* Two wrapped rows. align-items: stretch (the default) is what makes the
+     cards on a row equal height; the rows themselves keep their own heights,
+     506 and 367 on the board. The base is a fraction of the row so the columns
+     shrink cleanly between 900 and 1440 — the -1px keeps a line from wrapping
+     early on a subpixel rounding. */
+  .wall {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 24px;
+  }
+
+  .wall[data-collapsed="true"] .extra {
+    display: flex;
+  }
+
+  .expanderItem {
+    display: none;
+  }
+
+  /* Every card on the board is authored flex: 1 1 0 (get_computed_styles on
+     all six), so a row is three equal thirds of 1264 = 421.33 and the two
+     rows share one column rhythm. The board *renders* 401/461/401 and
+     426/419/419 only because Paper clamps each quote card to its measured
+     min-content and splits the remainder — a text-measurement artifact of
+     that engine, not an authored width. */
+  .card {
+    flex: 1 1 calc((100% - 48px) / 3 - 1px);
+  }
+
+  /* Row 1 — photo, quote, photo. Row 2 — quote, note, reserved. */
+  .cardA {
+    order: 1;
+  }
+
+  .cardEllen {
+    order: 2;
+  }
+
+  .cardB {
+    order: 3;
+  }
+
+  .cardTom {
+    order: 4;
+  }
+
+  .cardNote {
+    order: 5;
+  }
+
+  .cardReserved {
+    order: 6;
+  }
+
+  .photoBody {
+    padding: 26px;
+  }
+
+  .quoteCard {
+    padding: 26px 30px;
+  }
+
+  .noteCard,
+  .reservedCard {
+    padding: 26px;
+  }
+}

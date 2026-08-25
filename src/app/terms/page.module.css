@@ -1,0 +1,101 @@
+/* /terms — long-form prose in one reading column, no cards and no rail.
+   Mobile 390 is the base; the 900px breakpoint is the desktop 1440 board.
+   Board measure: 760px, centred in the gutters at both sizes. */
+
+/* --------------------------------------------------------------------------
+   Body
+   -------------------------------------------------------------------------- */
+
+/* The board ends the page on 68 / 128, which is exactly --au-section-pad-end
+   at each breakpoint; there is no top pad because the head supplies it. */
+.body {
+  padding-bottom: var(--au-section-pad-end);
+}
+
+.measure {
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+/* No gap: consecutive clauses share one hairline, so the rules read as a
+   single ruled column rather than as six detached blocks. */
+.clauses {
+  display: flex;
+  flex-direction: column;
+}
+
+.clause {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding-block: 26px;
+  border-top: 1px solid var(--au-rule);
+}
+
+/* The first rule is the heavier sash-black one — the same mark that opens a
+   step on the homepage — and the last clause closes the column. */
+.clause:first-child {
+  border-top: 1.5px solid var(--au-ink-2);
+}
+
+.clause:last-child {
+  border-bottom: 1px solid var(--au-rule);
+}
+
+/* Sub tier at the board's own leading: 32 on mobile, 38 on desktop. */
+.clause .clauseTitle {
+  line-height: 32px;
+}
+
+/* One step above body text, because this page is read rather than scanned. */
+.clauseBody {
+  color: var(--au-body);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: -0.018em;
+}
+
+.colophon {
+  padding-top: 26px;
+}
+
+/* The site's link affordance is a hairline, not an underline (SiteFooter uses
+   the same device). Colour and border only — nothing moves. */
+.mailto {
+  border-bottom: 1px solid var(--au-rule-strong);
+  overflow-wrap: anywhere;
+  transition: color 120ms ease-out, border-color 120ms ease-out;
+}
+
+.mailto:hover {
+  color: var(--au-ink);
+  border-bottom-color: var(--au-ink);
+}
+
+@media (min-width: 900px) {
+  .clause {
+    gap: 14px;
+    padding-block: 34px;
+  }
+
+  .clause .clauseTitle {
+    line-height: 38px;
+  }
+
+  .clauseBody {
+    font-size: 18px;
+    line-height: 30px;
+  }
+
+  .colophon {
+    padding-top: 30px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mailto {
+    transition: none;
+  }
+}

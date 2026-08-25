@@ -1,0 +1,69 @@
+/* The opener every route shares: label, display headline, lead. Same
+   three-part device as a section header, at page scale. One rhythm for all of
+   them — 18/18 mobile, 28 desktop — so no route drifts a few pixels from its
+   neighbours. */
+.hero {
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+
+.label {
+  padding-bottom: 18px;
+}
+
+.headline {
+  padding-bottom: 18px;
+  max-width: 16ch;
+}
+
+.lead {
+  max-width: 62ch;
+}
+
+.extra {
+  padding-top: 40px;
+}
+
+@media (min-width: 900px) {
+  .hero {
+    padding-top: 104px;
+    padding-bottom: 96px;
+    display: grid;
+    grid-template-columns: minmax(0, 700px) minmax(0, 480px);
+    justify-content: space-between;
+    column-gap: 60px;
+    /* start, not end: the lead's first line sits level with the headline's
+       first line. Bottom-aligning drops it by the difference in their heights,
+       which is invisible when they happen to be the same depth and obvious
+       the moment they are not. */
+    align-items: start;
+  }
+
+  .label {
+    grid-column: 1 / -1;
+    padding-bottom: 28px;
+  }
+
+  .headline {
+    padding-bottom: 0;
+  }
+
+  .extra {
+    grid-column: 1 / -1;
+    padding-top: 56px;
+  }
+
+  /* Prose pages keep the rhythm and drop the second column: a 680px measure
+     is the rule for long-form copy site-wide, and a lead ranged off to the
+     right of a legal clause would be read as a pull quote. */
+  .stacked {
+    display: block;
+    max-width: calc(680px + var(--au-gutter) * 2);
+    margin-inline: 0;
+  }
+
+  .stacked .headline {
+    padding-bottom: 20px;
+    max-width: none;
+  }
+}

@@ -1,0 +1,134 @@
+/* /blog — the notes index. Mobile 390 is the base; the 900px breakpoint is the
+   desktop 1440 board. Board values: rows are ruled, never carded — there is no
+   border box, no radius and no shadow anywhere in this list. The only heavier
+   mark is the 1.5px sash-black rule that opens the list, the same device §03
+   uses to open a step. */
+
+.index {
+  /* Board: 68px below the last rule on mobile, 128px on desktop. Those are the
+     section end values, so the token carries both. The hero supplies the top. */
+  padding-bottom: var(--au-section-pad-end);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The rule belongs to the row, not to the link, so it stays pinned to the
+   shell edge while a hovered row's tint bleeds past it. */
+.row {
+  border-top: 1px solid var(--au-rule);
+}
+
+.row:first-child {
+  border-top: 1.5px solid var(--au-ink-2);
+}
+
+.row:last-child {
+  border-bottom: 1px solid var(--au-rule);
+}
+
+/* Mobile 390: one column — meta row, title, deck — at 10px, 24px block. */
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-block: 24px;
+}
+
+/* Only the first entry has an article behind it. It borrows 16px on each side
+   so the hover tint reads as a row rather than as a box around the text —
+   the §07 disclosure device. Colour and background only: nothing moves. */
+.link {
+  padding-inline: 16px;
+  margin-inline: -16px;
+  background-color: transparent;
+  transition: background-color 120ms ease-out;
+}
+
+@media (hover: hover) {
+  .link:hover {
+    background-color: var(--au-ground-warm);
+  }
+}
+
+/* Mobile sets date and read time side by side, both in the label tier. */
+.meta {
+  display: flex;
+  gap: 16px;
+}
+
+/* Sub tier, but the board sets a looser leading than the token at both sizes. */
+.entry .title {
+  line-height: 32px;
+}
+
+@media (min-width: 900px) {
+  /* Desktop: the deck sits between body and lead — 17/27 at -0.3px on 17px. */
+  .entry .deck {
+    font-size: 17px;
+    line-height: 27px;
+    letter-spacing: -0.018em;
+  }
+
+  /* Board: 760 for the title column, 64 gap, the rest for the meta — at 1312
+     that resolves to exactly 760 / 488. The title track is the one that
+     shrinks between 900 and 1440; the meta track is `auto`, so a date is never
+     squeezed narrower than it sets. A minmax(0, 1fr) meta track collapses to
+     0px below about 1050 and wraps "14 MARCH 2026" onto three lines. */
+  .entry {
+    display: grid;
+    grid-template-columns: minmax(0, 760px) auto;
+    column-gap: 64px;
+    row-gap: 12px;
+    align-items: start;
+    padding-block: 34px;
+  }
+
+  /* Desktop moves the meta to a right-hand column, top-aligned and ranged
+     right. The DOM order is the mobile board's; only the placement changes. */
+  .meta {
+    grid-column: 2;
+    /* Spanning both rows, not just the first: the meta stack is 45px tall and
+       the title line is 38px, so pinning it to row 1 would push the deck 7px
+       below where the board draws it. */
+    grid-row: 1 / span 2;
+    align-self: start;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    text-align: right;
+  }
+
+  .title {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .deck {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  /* The read time drops out of the label tier into the caption tier on
+     desktop — the board sets "9 min", not "9 MIN". */
+  .meta .read {
+    font-family: var(--au-font);
+    font-size: var(--au-t-caption);
+    font-weight: 500;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+    text-transform: none;
+  }
+
+  .entry .title {
+    line-height: 38px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
+}

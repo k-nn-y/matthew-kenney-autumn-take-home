@@ -1,0 +1,82 @@
+/* §03 How it works — white ground, three plain columns.
+   Mobile 390 is the base; the 900px breakpoint is the desktop 1440 board.
+   Board padding: 64 / 68 mobile, 120 / 128 desktop. au-section supplies the
+   top value at both sizes, so only the bottom is restated here. The
+   element+class selector beats `.au-section` on specificity, so the bottom
+   value does not depend on which stylesheet lands first. */
+
+section.section {
+  background: var(--au-ground);
+  padding-bottom: 68px;
+}
+
+.header {
+  padding-bottom: 40px;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* The rule is the only mark that opens a step. 1.5px, sash black, full column
+   width — no card, no border, no shadow. */
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding-top: 20px;
+  border-top: 1.5px solid var(--au-ink-2);
+}
+
+.stepLabel {
+  color: var(--au-muted);
+}
+
+/* Sub tier, but the mobile board sets 28/34 rather than the 26px token. */
+.step .stepTitle {
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.62px;
+}
+
+/* Caption tier in slate-deep: the readable slate, never --au-slate. */
+.step .part {
+  margin-top: 4px;
+  color: var(--au-slate-deep);
+}
+
+@media (min-width: 900px) {
+  section.section {
+    padding-bottom: 128px;
+  }
+
+  .header {
+    padding-bottom: 72px;
+  }
+
+  /* Equal columns that shrink: flex-basis 0 + min-width 0, never a fixed px
+     width, so 900 → 1440 reflows without overflow. */
+  .steps {
+    flex-direction: row;
+    gap: 40px;
+  }
+
+  .step {
+    flex: 1 1 0;
+    gap: 14px;
+    padding-top: 22px;
+  }
+
+  .step .stepTitle {
+    font-size: var(--au-t-sub);
+    line-height: 36px;
+    letter-spacing: -0.024em;
+  }
+
+  .step .part {
+    margin-top: 6px;
+  }
+}

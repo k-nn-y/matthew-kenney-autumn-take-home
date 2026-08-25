@@ -1,0 +1,5 @@
+/* The chrome is fixed, so the page has to start below it. The homepage does
+   not use this: its hero is meant to run under the bare nav. */
+.main {
+  padding-top: var(--au-chrome-h);
+}

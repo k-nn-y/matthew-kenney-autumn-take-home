@@ -1,0 +1,346 @@
+/* /careers — translated from the Paper boards "Careers · Mobile 390" (these
+   base rules) and "Careers · Desktop 1440" (the one 900px block).
+   Section padding on the board is 64 / 68 mobile and 120 / 128 desktop, which
+   is exactly what .au-section prints, so only the letter band — 112 / 120 on
+   desktop — restates it. Every colour is a token; the page has no photograph
+   and no motion of its own. */
+
+/* Hero. The shared PageHero prints 56/56 mobile and 104/96 desktop; this
+   board asks for 64/68 and 128/112, so the difference is padding here rather
+   than an edit to a component other routes share. */
+.heroPad {
+  padding-top: 8px;
+  padding-bottom: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   The letter
+   -------------------------------------------------------------------------- */
+
+.letterShell {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.letterBody {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+}
+
+/* Between the sub tier and the lead tier — the board sets this paragraph on
+   its own, at 22/32 mobile and 26/38 desktop. */
+.letterLead {
+  color: var(--au-ink);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: -0.42px;
+}
+
+/* 17px: the board's letter voice, one step above body and used only here. */
+.letterProse {
+  color: var(--au-body);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 27px;
+  letter-spacing: -0.3px;
+}
+
+.signature {
+  padding-top: 20px;
+  border-top: 1px solid var(--au-rule);
+}
+
+/* --------------------------------------------------------------------------
+   One open role
+   -------------------------------------------------------------------------- */
+
+.sectionLabel {
+  display: block;
+  padding-bottom: 22px;
+}
+
+.roles {
+  background: var(--au-ground);
+}
+
+/* The whole row is the link: one tab stop, one hit area, far past 44px tall. */
+.roleRow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 24px;
+  padding-bottom: 26px;
+  border-top: 1px solid var(--au-rule);
+  border-bottom: 1px solid var(--au-rule);
+}
+
+.roleRow .roleTitle {
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.62px;
+}
+
+.roleMeta {
+  color: var(--au-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.25px;
+}
+
+/* The Apply chip is a span, not a control: the row's <a> already carries the
+   action, and a button inside a link would be invalid and a second tab stop.
+   Its height is the shared .au-btn's, which is the board's 52 here. */
+.roleRow .apply {
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* Hover is colour only — the row never moves. */
+.roleRow:hover .apply {
+  background: var(--au-ink-2-hover);
+  border-color: var(--au-ink-2-hover);
+}
+
+.roleSummary {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.point {
+  display: flex;
+  gap: 18px;
+  padding-block: 22px;
+  border-top: 1px solid var(--au-rule);
+}
+
+/* The board rules between the points, not around them. */
+.point:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.point:last-child {
+  padding-bottom: 0;
+}
+
+.mark {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--au-slate);
+  border-radius: var(--au-r-pill);
+}
+
+.mark::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: var(--au-r-pill);
+  background: var(--au-slate);
+}
+
+.pointText {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.pointTitle {
+  color: var(--au-ink);
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: -0.018em;
+}
+
+.pointBody {
+  color: var(--au-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.25px;
+}
+
+/* --------------------------------------------------------------------------
+   What it is actually like
+   -------------------------------------------------------------------------- */
+
+/* The mobile board leads this headline at 38px, two above the shared tier. */
+.life .lifeHeadline {
+  padding-bottom: 40px;
+  line-height: 38px;
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding-top: 20px;
+  padding-bottom: 30px;
+  border-top: 1.5px solid var(--au-ink-2);
+}
+
+.fact:last-child {
+  padding-bottom: 0;
+}
+
+.fact .factTitle {
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: -0.62px;
+}
+
+/* --------------------------------------------------------------------------
+   Desktop 1440
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 900px) {
+  .heroPad {
+    padding-top: 24px;
+    padding-bottom: 16px;
+  }
+
+  /* The one band the board pads differently from every other section. */
+  section.letter {
+    padding-top: 112px;
+    padding-bottom: 120px;
+  }
+
+  .letterShell {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 96px;
+  }
+
+  /* Both columns shrink — 240 and 760 are ceilings, not fixed widths, so the
+     band reflows cleanly between 900 and 1440. */
+  .letterLabel {
+    flex: 0 1 240px;
+    min-width: 0;
+    padding-top: 10px;
+  }
+
+  .letterBody {
+    flex: 0 1 760px;
+    gap: 26px;
+  }
+
+  .letterLead {
+    font-size: 26px;
+    line-height: 38px;
+    letter-spacing: -0.55px;
+  }
+
+  .signature {
+    margin-top: 8px;
+    padding-top: 22px;
+  }
+
+  .sectionLabel {
+    padding-bottom: 28px;
+  }
+
+  .roleRow {
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    padding-block: 30px;
+  }
+
+  .roleRow .roleTitle {
+    flex: 0 1 460px;
+    min-width: 0;
+    font-size: var(--au-t-sub);
+    line-height: 38px;
+    letter-spacing: -0.77px;
+  }
+
+  /* The meta wrapper dissolves so its two spans become row columns; the
+     separator only exists for the mobile one-line reading. */
+  .roleMeta {
+    display: contents;
+  }
+
+  .roleDept {
+    flex: 0 1 200px;
+    min-width: 0;
+  }
+
+  /* Basis auto, not 0: at 900 the row is 757 wide, and a zero basis squeezed
+     this column to nothing and stacked "New York · On site" five lines deep. */
+  .roleWhere {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .roleSep {
+    display: none;
+  }
+
+  .roleRow .apply {
+    flex-shrink: 0;
+    width: auto;
+    margin-top: 0;
+  }
+
+  .roleDetail {
+    display: flex;
+    align-items: flex-start;
+    gap: 96px;
+    padding-top: 56px;
+  }
+
+  .roleSummary {
+    flex: 0 1 460px;
+    min-width: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  /* 460 + 96 + 380 grows to the board's 460 / 96 / 756 at 1440, and keeps the
+     two columns in proportion on the way down instead of starving the list. */
+  .points {
+    flex: 1 1 380px;
+    min-width: 0;
+  }
+
+  .life .lifeHeadline {
+    padding-bottom: 72px;
+    line-height: 58px;
+  }
+
+  /* Three equal columns that shrink: flex-basis 0, never a fixed px width. */
+  .facts {
+    flex-direction: row;
+    gap: 40px;
+  }
+
+  .fact {
+    flex: 1 1 0;
+    gap: 14px;
+    padding-top: 22px;
+    padding-bottom: 0;
+  }
+
+  .fact .factTitle {
+    font-size: var(--au-t-sub);
+    line-height: 36px;
+    letter-spacing: -0.024em;
+  }
+}

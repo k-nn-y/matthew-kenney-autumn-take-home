@@ -1,0 +1,139 @@
+/* §05 Everything else — measured off the Paper boards
+   "§05 Everything else" desktop 1440 and mobile 390.
+   Mobile is the base; one breakpoint at 900px, as everywhere on this page. */
+
+/* Board: 64px top / 68px bottom (mobile), 120 / 128 (desktop). `au-section`
+   supplies the top; the element+class selector wins the 4px/8px extra at the
+   bottom deterministically, whatever order the stylesheets land in. */
+section.section {
+  background: var(--au-ground);
+  padding-bottom: 68px;
+}
+
+/* Mobile: header, then a 30px gap, then the rows. */
+.shell {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Board mobile puts 22px under the label; the shared SectionHeader ships 18px
+   (its desktop stacked value, 28px, is already right). Scoped here so this
+   section matches its own board without moving the shared component. */
+.shell > div:first-child > p:first-child {
+  padding-bottom: 22px;
+}
+
+/* The mobile board's lead is a shorter string, not a reflow of the desktop
+   one. `display: none` keeps the inactive copy out of the a11y tree. */
+.leadWide {
+  display: none;
+}
+
+.leadNarrow {
+  display: inline;
+}
+
+/* --- the five rows ------------------------------------------------------ */
+
+.rows {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding-block: 22px;
+  border-top: 1px solid var(--au-rule);
+}
+
+.row:last-child {
+  border-bottom: 1px solid var(--au-rule);
+}
+
+.marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  /* 20px ring, so the 999px radius reads as a circle, never as a pill. */
+  border: 1.5px solid var(--au-slate);
+  border-radius: var(--au-r-pill);
+}
+
+.markerDot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  background: var(--au-slate);
+  border-radius: var(--au-r-pill);
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.rowTitle {
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: -0.018em;
+  color: var(--au-ink);
+}
+
+/* au-body, but the board tightens the leading to 24px inside a row. */
+p.rowBody {
+  line-height: 24px;
+}
+
+/* --- desktop ------------------------------------------------------------ */
+
+@media (min-width: 900px) {
+  section.section {
+    padding-bottom: 128px;
+  }
+
+  /* 640 + 80 + 592 = 1312. Both tracks are fr so they shrink between
+     900 and 1440 instead of overflowing. */
+  .shell {
+    display: grid;
+    grid-template-columns: minmax(0, 640fr) minmax(0, 592fr);
+    column-gap: 80px;
+    align-items: stretch;
+  }
+
+  /* Desktop stacked label is 28px on the board, which is what SectionHeader
+     already gives; undo the mobile-only 22px. */
+  .shell > div:first-child > p:first-child {
+    padding-bottom: 28px;
+  }
+
+  /* The SectionHeader (first grid child) stretches to the height of the row
+     stack and its lead pins to the BOTTOM of that column — deliberate on the
+     board. SectionHeader takes no className, so this reaches its lead <p>. */
+  .shell > div:first-child > p:last-child {
+    margin-top: auto;
+    max-width: 520px;
+  }
+
+  .leadWide {
+    display: inline;
+  }
+
+  .leadNarrow {
+    display: none;
+  }
+
+  /* The board nudges the row stack down 8px so the first hairline clears the
+     cap-height of the label. */
+  .rows {
+    padding-top: 8px;
+  }
+}
