@@ -23,8 +23,18 @@ function readShouldPlay() {
       connection?: { saveData?: boolean; effectiveType?: string };
     }
   ).connection;
+  // Save-Data is an explicit request not to be sent 3.9MB. Honour it.
   if (connection?.saveData) return false;
-  if (connection?.effectiveType && !/4g/.test(connection.effectiveType)) return false;
+
+  /* effectiveType is a rolling *estimate* of throughput, not a statement of
+     capability, and it is pessimistic early in a page load — ordinary
+     broadband frequently reports "3g" for the first seconds. Requiring "4g"
+     withheld the video from most real visitors while passing on localhost,
+     where the loopback always estimates 4g. So this bails only on the two
+     types that genuinely cannot carry the file. */
+  if (connection?.effectiveType && /^(slow-2g|2g)$/.test(connection.effectiveType)) {
+    return false;
+  }
 
   return true;
 }
@@ -39,7 +49,7 @@ function readShouldPlay() {
  * It is strictly an enhancement on top of the still:
  *   - no JavaScript      -> the still, and the video element never exists
  *   - prefers-reduced-motion -> the still
- *   - Save-Data or a 2g/3g connection -> the still, because 3.9MB in front of
+ *   - Save-Data or a 2g connection -> the still, because 3.9MB in front of
  *     the offer is worse than no motion at all
  *   - video that cannot decode -> the still, because opacity only lifts on
  *     canplaythrough
